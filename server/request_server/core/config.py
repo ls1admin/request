@@ -1,0 +1,63 @@
+from pathlib import Path
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from request_server import __version__ as request_server_version
+
+# Get the server root directory (where .env file lives)
+SERVER_ROOT = Path(__file__).resolve().parent.parent.parent
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=SERVER_ROOT / ".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore",
+    )
+
+    # Application
+    app_name: str = "aet-request-server"
+    app_version: str = request_server_version
+    debug: bool = False
+    cors_origins: list[str] = [
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
+    ]
+
+    # Database
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/aet_request"
+
+    # Keycloak
+    keycloak_url: str = "https://keycloak.example.com"
+    keycloak_realm: str = "aet"
+    keycloak_client_id: str = "aet-request"
+
+    # Jira
+    jira_url: str = ""
+    jira_username: str = ""
+    jira_api_token: str = ""
+    jira_project: str = ""
+
+    # GitLab
+    gitlab_url: str = ""
+    gitlab_token: str = ""
+
+    @property
+    def jira_enabled(self) -> bool:
+        return bool(
+            self.jira_url and self.jira_username and self.jira_api_token and self.jira_project
+        )
+
+    @property
+    def keycloak_issuer(self) -> str:
+        return f"{self.keycloak_url}/realms/{self.keycloak_realm}"
+
+    @property
+    def keycloak_jwks_url(self) -> str:
+        return f"{self.keycloak_issuer}/protocol/openid-connect/certs"
+
+
+settings = Settings()

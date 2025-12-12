@@ -1,0 +1,23 @@
+{{- if .Values.client.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "aet-request.client.fullname" . }}
+  labels:
+    {{- include "aet-request.labels" . | nindent 4 }}
+    app.kubernetes.io/component: client
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "aet-request.client.fullname" . }}
+  minReplicas: {{ .Values.client.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.client.autoscaling.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.client.autoscaling.targetCPUUtilizationPercentage }}
+{{- end }}

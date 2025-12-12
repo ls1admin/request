@@ -1,0 +1,40 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "aet-request.fullname" . }}
+  labels:
+    {{- include "aet-request.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          - path: {{ .paths.api }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "aet-request.server.fullname" $ }}
+                port:
+                  number: {{ $.Values.server.service.port }}
+          - path: {{ .paths.app }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "aet-request.client.fullname" $ }}
+                port:
+                  number: {{ $.Values.client.service.port }}
+    {{- end }}
+{{- end }}

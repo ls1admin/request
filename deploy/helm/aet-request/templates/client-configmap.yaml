@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aet-request.client.fullname" . }}
+  labels:
+    {{- include "aet-request.labels" . | nindent 4 }}
+    app.kubernetes.io/component: client
+data:
+  VITE_API_BASE_URL: {{ .Values.client.config.VITE_API_BASE_URL | quote }}
+  VITE_KEYCLOAK_URL: {{ .Values.client.config.VITE_KEYCLOAK_URL | quote }}
+  VITE_KEYCLOAK_REALM: {{ .Values.client.config.VITE_KEYCLOAK_REALM | quote }}
+  VITE_KEYCLOAK_CLIENT_ID: {{ .Values.client.config.VITE_KEYCLOAK_CLIENT_ID | quote }}
+  VITE_ADMIN_ROLE: {{ .Values.client.config.VITE_ADMIN_ROLE | quote }}

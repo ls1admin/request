@@ -1,0 +1,18 @@
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+{{- end }}
+{{- else }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "aet-request.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=client" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT={{ .Values.client.service.targetPort }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+  echo "http://127.0.0.1:8080"
+{{- end }}
+
+2. Check rollout status:
+  kubectl rollout status deploy/{{ include "aet-request.client.fullname" . }} -n {{ .Release.Namespace }}
+  kubectl rollout status deploy/{{ include "aet-request.server.fullname" . }} -n {{ .Release.Namespace }}
+
+3. Check migration job logs:
+  kubectl logs job/{{ include "aet-request.server.fullname" . }}-migrate-{{ .Release.Revision }} -n {{ .Release.Namespace }}

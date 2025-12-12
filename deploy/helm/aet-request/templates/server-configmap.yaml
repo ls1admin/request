@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aet-request.server.fullname" . }}
+  labels:
+    {{- include "aet-request.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server
+data:
+  APP_NAME: {{ .Values.server.config.APP_NAME | quote }}
+  DEBUG: {{ .Values.server.config.DEBUG | quote }}
+  CORS_ORIGINS: {{ .Values.server.config.CORS_ORIGINS | quote }}
+  KEYCLOAK_URL: {{ .Values.server.config.KEYCLOAK_URL | quote }}
+  KEYCLOAK_REALM: {{ .Values.server.config.KEYCLOAK_REALM | quote }}
+  KEYCLOAK_CLIENT_ID: {{ .Values.server.config.KEYCLOAK_CLIENT_ID | quote }}
+  JIRA_URL: {{ .Values.server.config.JIRA_URL | quote }}
+  JIRA_PROJECT: {{ .Values.server.config.JIRA_PROJECT | quote }}
+  GITLAB_URL: {{ .Values.server.config.GITLAB_URL | quote }}
