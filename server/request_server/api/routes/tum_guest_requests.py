@@ -23,7 +23,10 @@ from request_server.schemas.tum_guest_request import (
     TUMGuestRequestListResponse,
     TUMGuestRequestResponse,
 )
-from request_server.services.jira import jira_service
+from request_server.services.descriptions.tum_guest_request import (
+    handle_tum_guest_ticket_creation,
+)
+from request_server.services.ticket import get_ticket_service
 
 logger = logging.getLogger(__name__)
 
@@ -108,9 +111,10 @@ async def create_tum_guest_request(
     await db.commit()
     await db.refresh(guest_request)
 
-    # Create Jira ticket
+    # Create ticket in the configured ticket system
     try:
-        ticket_key = await jira_service.create_guest_request_ticket(
+        ticket_key = await handle_tum_guest_ticket_creation(
+            get_ticket_service(),
             guest_request,
             is_authenticated=is_authenticated,
             requester_username=current_user.username if current_user else None,
@@ -120,13 +124,13 @@ async def create_tum_guest_request(
             await db.commit()
             await db.refresh(guest_request)
             logger.info(
-                f"Created Jira ticket {ticket_key} for TUM guest request {guest_request.id}"
+                f"Created ticket {ticket_key} for TUM guest request {guest_request.id}"
             )
         else:
-            logger.warning(f"Failed to create Jira ticket for TUM guest request {guest_request.id}")
+            logger.warning(f"Failed to create ticket for TUM guest request {guest_request.id}")
     except Exception as e:
-        logger.error(f"Error creating Jira ticket for TUM guest request {guest_request.id}: {e}")
-        # Don't fail the request if Jira ticket creation fails
+        logger.error(f"Error creating ticket for TUM guest request {guest_request.id}: {e}")
+        # Don't fail the request if ticket creation fails
 
     return guest_request
 

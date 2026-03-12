@@ -20,7 +20,8 @@ from request_server.schemas.vm_request import (
     VMRequestListResponse,
     VMRequestResponse,
 )
-from request_server.services.jira import jira_service
+from request_server.services.descriptions.vm_request import handle_vm_ticket_creation
+from request_server.services.ticket import get_ticket_service
 
 logger = logging.getLogger(__name__)
 
@@ -135,19 +136,21 @@ async def create_vm_request(
     await db.commit()
     await db.refresh(vm_request)
 
-    # Create Jira ticket synchronously so we can return the ticket key
+    # Create ticket in the configured ticket system
     try:
-        ticket_key = await jira_service.create_ticket(vm_request, ssh_public_key)
+        ticket_key = await handle_vm_ticket_creation(
+            get_ticket_service(), vm_request, ssh_public_key
+        )
         if ticket_key:
             vm_request.jira_ticket_key = ticket_key
             await db.commit()
             await db.refresh(vm_request)
-            logger.info(f"Created Jira ticket {ticket_key} for VM request {vm_request.id}")
+            logger.info(f"Created ticket {ticket_key} for VM request {vm_request.id}")
         else:
-            logger.warning(f"Failed to create Jira ticket for VM request {vm_request.id}")
+            logger.warning(f"Failed to create ticket for VM request {vm_request.id}")
     except Exception as e:
-        logger.error(f"Error creating Jira ticket for VM request {vm_request.id}: {e}")
-        # Don't fail the request if Jira ticket creation fails
+        logger.error(f"Error creating ticket for VM request {vm_request.id}: {e}")
+        # Don't fail the request if ticket creation fails
 
     return vm_request
 

@@ -20,7 +20,10 @@ from request_server.schemas.vm_access_request import (
     VMAccessRequestListResponse,
     VMAccessRequestResponse,
 )
-from request_server.services.jira import jira_service
+from request_server.services.descriptions.vm_access_request import (
+    handle_vm_access_ticket_creation,
+)
+from request_server.services.ticket import get_ticket_service
 
 logger = logging.getLogger(__name__)
 
@@ -116,23 +119,25 @@ async def create_vm_access_request(
     await db.commit()
     await db.refresh(access_request)
 
-    # Create Jira ticket synchronously so we can return the ticket key
+    # Create ticket in the configured ticket system
     try:
-        ticket_key = await jira_service.create_access_request_ticket(access_request, ssh_public_key)
+        ticket_key = await handle_vm_access_ticket_creation(
+            get_ticket_service(), access_request, ssh_public_key
+        )
         if ticket_key:
             access_request.jira_ticket_key = ticket_key
             await db.commit()
             await db.refresh(access_request)
             logger.info(
-                f"Created Jira ticket {ticket_key} for VM access request {access_request.id}"
+                f"Created ticket {ticket_key} for VM access request {access_request.id}"
             )
         else:
             logger.warning(
-                f"Failed to create Jira ticket for VM access request {access_request.id}"
+                f"Failed to create ticket for VM access request {access_request.id}"
             )
     except Exception as e:
-        logger.error(f"Error creating Jira ticket for VM access request {access_request.id}: {e}")
-        # Don't fail the request if Jira ticket creation fails
+        logger.error(f"Error creating ticket for VM access request {access_request.id}: {e}")
+        # Don't fail the request if ticket creation fails
 
     return access_request
 

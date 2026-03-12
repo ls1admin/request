@@ -19,7 +19,10 @@ from request_server.schemas.artemis_developer_request import (
     ArtemisDeveloperRequestListResponse,
     ArtemisDeveloperRequestResponse,
 )
-from request_server.services.jira import jira_service
+from request_server.services.descriptions.artemis_developer_request import (
+    handle_artemis_ticket_creation,
+)
+from request_server.services.ticket import get_ticket_service
 
 logger = logging.getLogger(__name__)
 
@@ -81,9 +84,10 @@ async def create_artemis_developer_request(
     await db.commit()
     await db.refresh(artemis_request)
 
-    # Create Jira ticket
+    # Create ticket in the configured ticket system
     try:
-        ticket_key = await jira_service.create_artemis_developer_request_ticket(
+        ticket_key = await handle_artemis_ticket_creation(
+            get_ticket_service(),
             artemis_request,
             is_authenticated=is_authenticated,
             requester_username=current_user.username if current_user else None,
@@ -93,17 +97,17 @@ async def create_artemis_developer_request(
             await db.commit()
             await db.refresh(artemis_request)
             logger.info(
-                f"Created Jira ticket {ticket_key} for Artemis developer request {artemis_request.id}"
+                f"Created ticket {ticket_key} for Artemis developer request {artemis_request.id}"
             )
         else:
             logger.warning(
-                f"Failed to create Jira ticket for Artemis developer request {artemis_request.id}"
+                f"Failed to create ticket for Artemis developer request {artemis_request.id}"
             )
     except Exception as e:
         logger.error(
-            f"Error creating Jira ticket for Artemis developer request {artemis_request.id}: {e}"
+            f"Error creating ticket for Artemis developer request {artemis_request.id}: {e}"
         )
-        # Don't fail the request if Jira ticket creation fails
+        # Don't fail the request if ticket creation fails
 
     return artemis_request
 

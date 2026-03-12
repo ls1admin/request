@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     keycloak_realm: str = "aet"
     keycloak_client_id: str = "aet-request"
 
+    # Ticket System
+    ticket_system: str = "jira"  # "jira", "noop"
+
     # Jira
     jira_url: str = ""
     jira_username: str = ""
@@ -50,6 +53,14 @@ class Settings(BaseSettings):
         return bool(
             self.jira_url and self.jira_username and self.jira_api_token and self.jira_project
         )
+
+    @property
+    def ticket_system_enabled(self) -> bool:
+        if self.ticket_system == "jira":
+            return self.jira_enabled
+        if self.ticket_system == "noop":
+            return False
+        return False
 
     @property
     def keycloak_issuer(self) -> str:
