@@ -11,19 +11,19 @@ from sqlalchemy.orm import Mapped, mapped_column
 from request_server.db.base import Base, TimestampMixin
 
 
-class GuestType(str, enum.Enum):
+class GuestType(enum.StrEnum):
     IPRAKTIKUM_CUSTOMER = "ipraktikum-customer"
     ARTEMIS = "artemis"
     OTHER = "other"
 
 
-class Gender(str, enum.Enum):
+class Gender(enum.StrEnum):
     MALE = "male"
     FEMALE = "female"
     DIVERSE = "diverse"
 
 
-class GuestRequestStatus(str, enum.Enum):
+class GuestRequestStatus(enum.StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"

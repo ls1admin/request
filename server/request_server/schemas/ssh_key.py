@@ -2,12 +2,12 @@
 
 import uuid
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class SSHKeyType(str, Enum):
+class SSHKeyType(StrEnum):
     RSA = "rsa"
     ED25519 = "ed25519"
     ECDSA = "ecdsa"

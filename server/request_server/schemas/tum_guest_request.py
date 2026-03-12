@@ -2,7 +2,7 @@
 
 import uuid
 from datetime import date, datetime
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import (
     BaseModel,
@@ -17,19 +17,19 @@ from pydantic import (
 from request_server.core.config import settings
 
 
-class GuestType(str, Enum):
+class GuestType(StrEnum):
     IPRAKTIKUM_CUSTOMER = "ipraktikum-customer"
     ARTEMIS = "artemis"
     OTHER = "other"
 
 
-class Gender(str, Enum):
+class Gender(StrEnum):
     MALE = "male"
     FEMALE = "female"
     DIVERSE = "diverse"
 
 
-class GuestRequestStatus(str, Enum):
+class GuestRequestStatus(StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"

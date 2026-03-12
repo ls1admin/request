@@ -1,7 +1,7 @@
 """SSH Key database model."""
 
 import uuid
-from enum import Enum
+from enum import StrEnum
 
 from sqlalchemy import String, Text
 from sqlalchemy.dialects.postgresql import UUID
@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from request_server.db.base import Base, TimestampMixin
 
 
-class SSHKeyType(str, Enum):
+class SSHKeyType(StrEnum):
     RSA = "rsa"
     ED25519 = "ed25519"
     ECDSA = "ecdsa"

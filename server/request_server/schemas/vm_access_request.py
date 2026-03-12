@@ -3,7 +3,7 @@
 import re
 import uuid
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator
@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validat
 from request_server.core.config import settings
 
 
-class AccessRequestStatus(str, Enum):
+class AccessRequestStatus(StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"

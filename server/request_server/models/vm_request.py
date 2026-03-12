@@ -9,18 +9,18 @@ from sqlalchemy.orm import Mapped, mapped_column
 from request_server.db.base import Base, TimestampMixin
 
 
-class ProjectType(str, enum.Enum):
+class ProjectType(enum.StrEnum):
     IPRAKTIKUM = "ipraktikum"
     THESIS = "thesis"
     CHAIR_PROJECT = "chair_project"
 
 
-class StudyLevel(str, enum.Enum):
+class StudyLevel(enum.StrEnum):
     BA = "BA"
     MA = "MA"
 
 
-class RequestStatus(str, enum.Enum):
+class RequestStatus(enum.StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"

@@ -37,6 +37,7 @@ dev = [
 ci = [
     "ruff>=0.15.5,<1.0.0",
     "ty>=0.0.21,<1.0.0",
+    "python-semantic-release>=10.5.0,<11.0.0",
 ]
 
 [tool.uv.build-backend]

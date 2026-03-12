@@ -1,7 +1,7 @@
 import re
 import uuid
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator, model_validator
@@ -9,23 +9,23 @@ from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validat
 from request_server.core.config import settings
 
 
-class ProjectType(str, Enum):
+class ProjectType(StrEnum):
     IPRAKTIKUM = "ipraktikum"
     THESIS = "thesis"
     CHAIR_PROJECT = "chair_project"
 
 
-class StudyLevel(str, Enum):
+class StudyLevel(StrEnum):
     BA = "BA"
     MA = "MA"
 
 
-class Protocol(str, Enum):
+class Protocol(StrEnum):
     TCP = "tcp"
     UDP = "udp"
 
 
-class RequestStatus(str, Enum):
+class RequestStatus(StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"

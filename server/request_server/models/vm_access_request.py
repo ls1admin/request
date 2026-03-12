@@ -11,7 +11,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from request_server.db.base import Base, TimestampMixin
 
 
-class AccessRequestStatus(str, enum.Enum):
+class AccessRequestStatus(enum.StrEnum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
