@@ -14,7 +14,10 @@ from request_server.models.tum_guest_request import Gender as GenderModel
 from request_server.models.tum_guest_request import GuestType as GuestTypeModel
 from request_server.models.tum_guest_request import TUMGuestRequest as TUMGuestRequestModel
 from request_server.schemas.tum_guest_request import (
+    ArtemisDetails,
     GuestType,
+    IPraktikumDetails,
+    OtherDetails,
     TUMGuestRequestCreateAnonymous,
     TUMGuestRequestCreateAuthenticated,
     TUMGuestRequestListResponse,
@@ -29,9 +32,9 @@ router = APIRouter(prefix="/tum-guest-requests", tags=["TUM Guest Requests"])
 
 def _extract_guest_type_details(
     guest_type: GuestType,
-    ipraktikum_fields: dict | None,
-    artemis_fields: dict | None,
-    other_fields: dict | None,
+    ipraktikum_fields: IPraktikumDetails | None,
+    artemis_fields: ArtemisDetails | None,
+    other_fields: OtherDetails | None,
 ) -> dict:
     """Extract guest type specific details based on guest type."""
     if guest_type == GuestType.IPRAKTIKUM_CUSTOMER and ipraktikum_fields:

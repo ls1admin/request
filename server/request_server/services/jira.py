@@ -7,7 +7,7 @@ from base64 import b64encode
 from typing import TYPE_CHECKING
 
 import httpx
-from passlib.hash import sha512_crypt
+from passlib.hash import sha512_crypt  # type: ignore[import-untyped]
 
 from request_server.core.config import settings
 

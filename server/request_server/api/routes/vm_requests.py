@@ -14,6 +14,8 @@ from request_server.models.vm_request import ProjectType as DBProjectType
 from request_server.models.vm_request import VMRequest as VMRequestModel
 from request_server.schemas.vm_request import (
     ProjectType,
+    SSHKeyExisting,
+    SSHKeyNew,
     VMRequestCreate,
     VMRequestListResponse,
     VMRequestResponse,
@@ -48,21 +50,22 @@ async def create_vm_request(
 ) -> VMRequestModel:
     """Create a new VM request."""
     # Handle SSH key - create new key in database if needed
-    ssh_key_type = request.ssh_key.type
+    ssh_key = request.ssh_key
+    ssh_key_type = ssh_key.type
     ssh_key_value = None
     ssh_public_key = None  # Track the actual public key for Jira ticket
 
-    if ssh_key_type == "new":
+    if isinstance(ssh_key, SSHKeyNew):
         # Parse and validate the SSH key
         try:
-            key_type, fingerprint = parse_ssh_key(request.ssh_key.public_key)
+            key_type, fingerprint = parse_ssh_key(ssh_key.public_key)
         except ValueError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Invalid SSH key: {e}",
             ) from e
 
-        ssh_public_key = request.ssh_key.public_key.strip()
+        ssh_public_key = ssh_key.public_key.strip()
 
         # Check if this key already exists for the user
         existing_query = select(SSHKey).where(
@@ -80,7 +83,7 @@ async def create_vm_request(
             new_ssh_key = SSHKey(
                 owner_id=current_user.id,
                 owner_username=current_user.username,
-                name=request.ssh_key.name,
+                name=ssh_key.name,
                 public_key=ssh_public_key,
                 fingerprint=fingerprint,
                 key_type=key_type,
@@ -89,10 +92,10 @@ async def create_vm_request(
             await db.flush()
             ssh_key_value = str(new_ssh_key.id)
 
-    elif ssh_key_type == "existing":
+    elif isinstance(ssh_key, SSHKeyExisting):
         # Verify the key exists and belongs to the user
         key_query = select(SSHKey).where(
-            SSHKey.id == uuid.UUID(request.ssh_key.key_id),
+            SSHKey.id == uuid.UUID(ssh_key.key_id),
             SSHKey.owner_id == current_user.id,
         )
         result = await db.execute(key_query)
@@ -104,7 +107,7 @@ async def create_vm_request(
                 detail="Selected SSH key not found or does not belong to you",
             )
 
-        ssh_key_value = request.ssh_key.key_id
+        ssh_key_value = ssh_key.key_id
         ssh_public_key = existing_key.public_key
 
     # Create the VM request
