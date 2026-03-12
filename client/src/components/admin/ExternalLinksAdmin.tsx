@@ -52,7 +52,10 @@ export function ExternalLinksAdmin({
   };
 
   const handleAddLink = () => {
-    if (!newLink.label?.trim() || !newLink.url?.trim()) {
+    const label = newLink.label?.trim();
+    const url = newLink.url?.trim();
+
+    if (!label || !url) {
       return;
     }
 
@@ -61,8 +64,8 @@ export function ExternalLinksAdmin({
       ...prev,
       {
         id,
-        label: newLink.label?.trim(),
-        url: newLink.url?.trim(),
+        label,
+        url,
         description: newLink.description?.trim() || undefined,
         enabled: newLink.enabled ?? true,
       },

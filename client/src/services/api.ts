@@ -1,5 +1,14 @@
 import { API_BASE_URL } from "@/config/api";
 
+interface ValidationErrorDetail {
+  msg?: string;
+  loc?: string[];
+}
+
+interface ErrorResponse {
+  detail?: string | ValidationErrorDetail[];
+}
+
 class ApiError extends Error {
   status: number;
   details?: unknown;
@@ -17,6 +26,10 @@ let tokenGetter: (() => string | null) | null = null;
 
 export function setTokenGetter(getter: () => string | null): void {
   tokenGetter = getter;
+}
+
+function isErrorResponse(value: unknown): value is ErrorResponse {
+  return typeof value === "object" && value !== null && "detail" in value;
 }
 
 async function fetchWithAuth(
@@ -47,11 +60,11 @@ async function fetchWithAuth(
       // Ignore JSON parse errors
     }
     let message: string;
-    if (typeof details?.detail === "string") {
+    if (isErrorResponse(details) && typeof details.detail === "string") {
       message = details.detail;
-    } else if (Array.isArray(details?.detail)) {
+    } else if (isErrorResponse(details) && Array.isArray(details.detail)) {
       message = details.detail
-        .map((e: { msg?: string; loc?: string[] }) =>
+        .map((e) =>
           e.msg ? `${e.loc?.slice(-1)[0] ?? "field"}: ${e.msg}` : String(e),
         )
         .join("; ");

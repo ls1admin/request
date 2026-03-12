@@ -2,16 +2,17 @@ name: Server CI/CD
 
 on:
   pull_request:
-    paths:
-      - "server/**"
-      - ".github/workflows/server-ci-cd.yml"
+    paths-ignore:
+      - "client/**"
+      - "deploy/client/**"
+      - ".github/workflows/client-ci-cd.yml"
   push:
     branches:
       - main
-    paths:
-      - "server/**"
-      - "deploy/server/**"
-      - ".github/workflows/server-ci-cd.yml"
+    paths-ignore:
+      - "client/**"
+      - "deploy/client/**"
+      - ".github/workflows/client-ci-cd.yml"
   workflow_dispatch:
 
 permissions:

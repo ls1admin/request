@@ -1,0 +1,13 @@
+*
+!client/
+!client/**
+!deploy/
+!deploy/client/
+!deploy/client/**
+
+client/node_modules
+client/dist
+client/.DS_Store
+client/.vite
+client/coverage
+
