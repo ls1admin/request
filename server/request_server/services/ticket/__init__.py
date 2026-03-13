@@ -33,6 +33,11 @@ def get_ticket_service() -> TicketService:
 
         _ticket_service = JiraTicketService()
         logger.info("Initialized Jira ticket service")
+    elif ticket_system == "redmine" and settings.redmine_enabled:
+        from request_server.services.ticket.redmine import RedmineTicketService
+
+        _ticket_service = RedmineTicketService()
+        logger.info("Initialized Redmine ticket service")
     elif ticket_system == "noop" or not settings.ticket_system_enabled:
         _ticket_service = NoOpTicketService()
         logger.info("Initialized NoOp ticket service (ticket system disabled)")

@@ -36,13 +36,22 @@ class Settings(BaseSettings):
     keycloak_client_id: str = "aet-request"
 
     # Ticket System
-    ticket_system: str = "jira"  # "jira", "noop"
+    ticket_system: str = "jira"  # "jira", "redmine", "noop"
+    secondary_reporter_field: str = "customfield_12200"
+    service_account_name: str = ""
 
     # Jira
     jira_url: str = ""
     jira_username: str = ""
     jira_api_token: str = ""
     jira_project: str = ""
+
+    # Redmine
+    redmine_url: str = ""
+    redmine_api_key: str = ""
+    redmine_project: str = ""
+    redmine_group_id: int = 0
+    redmine_username: str = ""
 
     # GitLab
     gitlab_url: str = ""
@@ -55,9 +64,15 @@ class Settings(BaseSettings):
         )
 
     @property
+    def redmine_enabled(self) -> bool:
+        return bool(self.redmine_url and self.redmine_api_key and self.redmine_project)
+
+    @property
     def ticket_system_enabled(self) -> bool:
         if self.ticket_system == "jira":
             return self.jira_enabled
+        if self.ticket_system == "redmine":
+            return self.redmine_enabled
         if self.ticket_system == "noop":
             return False
         return False

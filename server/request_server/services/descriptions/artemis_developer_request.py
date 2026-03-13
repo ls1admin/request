@@ -260,12 +260,16 @@ async def handle_artemis_ticket_creation(
             summary=builder.build_summary(artemis_request, is_authenticated),
             description=builder.build_description(artemis_request, is_authenticated),
             reporter_username=requester_username if is_authenticated else None,
+            reporter_name=artemis_request.requester_name if is_authenticated else None,
+            reporter_email=artemis_request.requester_email if is_authenticated else None,
         )
     )
 
     if ticket_key:
         await ticket_service.set_custom_field(
-            ticket_key, "customfield_12200", {"name": settings.jira_username}
+            ticket_key,
+            settings.secondary_reporter_field,
+            {"name": settings.service_account_name},
         )
         await ticket_service.add_comment(
             CommentRequest(

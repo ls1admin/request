@@ -22,6 +22,8 @@ class TicketCreateRequest:
     summary: str
     description: str
     reporter_username: str | None = None
+    reporter_name: str | None = None
+    reporter_email: str | None = None
     issue_type: str = "Task"
 
 

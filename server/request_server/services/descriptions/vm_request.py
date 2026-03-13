@@ -177,12 +177,16 @@ async def handle_vm_ticket_creation(
             summary=builder.build_summary(vm_request),
             description=builder.build_description(vm_request, public_key),
             reporter_username=vm_request.requester_username,
+            reporter_name=vm_request.requester_name,
+            reporter_email=vm_request.requester_email,
         )
     )
 
     if ticket_key:
         await ticket_service.set_custom_field(
-            ticket_key, "customfield_12200", {"name": settings.jira_username}
+            ticket_key,
+            settings.secondary_reporter_field,
+            {"name": settings.service_account_name},
         )
         await ticket_service.add_comment(
             CommentRequest(
