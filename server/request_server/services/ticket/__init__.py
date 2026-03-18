@@ -38,6 +38,11 @@ def get_ticket_service() -> TicketService:
 
         _ticket_service = RedmineTicketService()
         logger.info("Initialized Redmine ticket service")
+    elif ticket_system == "debug":
+        from request_server.services.ticket.debug import DebugTicketService
+
+        _ticket_service = DebugTicketService()
+        logger.info("Initialized Debug ticket service (E2E testing mode)")
     elif ticket_system == "noop" or not settings.ticket_system_enabled:
         _ticket_service = NoOpTicketService()
         logger.info("Initialized NoOp ticket service (ticket system disabled)")

@@ -8,11 +8,14 @@ from pydantic import BaseModel
 
 from request_server.core.config import settings
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=not settings.auth_bypass)
 optional_security = HTTPBearer(auto_error=False)
 
 # Cache for JWKS
 _jwks_cache: dict | None = None
+
+# Fixed user returned when auth_bypass is enabled (E2E testing)
+_BYPASS_USER: "CurrentUser | None" = None
 
 
 class TokenPayload(BaseModel):
@@ -48,6 +51,20 @@ class CurrentUser(BaseModel):
         return None
 
 
+def _get_bypass_user() -> "CurrentUser":
+    global _BYPASS_USER
+    if _BYPASS_USER is None:
+        _BYPASS_USER = CurrentUser(
+            id="test-user-001",
+            username="testuser",
+            email="test@tum.de",
+            first_name="Test",
+            last_name="User",
+            roles=["admin"],
+        )
+    return _BYPASS_USER
+
+
 async def get_jwks() -> dict:
     """Fetch and cache JWKS from Keycloak."""
     global _jwks_cache
@@ -60,9 +77,25 @@ async def get_jwks() -> dict:
 
 
 async def verify_token(
-    credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(security)],
 ) -> TokenPayload:
     """Verify JWT token from Keycloak."""
+    if settings.auth_bypass:
+        return TokenPayload(
+            sub="test-user-001",
+            email="test@tum.de",
+            preferred_username="testuser",
+            given_name="Test",
+            family_name="User",
+            realm_access={"roles": ["admin"]},
+        )
+
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+        )
+
     token = credentials.credentials
 
     try:
@@ -105,6 +138,9 @@ async def get_current_user(
     token: Annotated[TokenPayload, Depends(verify_token)],
 ) -> CurrentUser:
     """Extract current user from verified token."""
+    if settings.auth_bypass:
+        return _get_bypass_user()
+
     roles = []
     if token.realm_access:
         roles = token.realm_access.get("roles", [])
@@ -139,6 +175,12 @@ async def get_optional_current_user(
 
     This allows endpoints to handle both authenticated and anonymous requests.
     """
+    if settings.auth_bypass:
+        # In bypass mode, return the bypass user if a token header is present, else None
+        if credentials is not None:
+            return _get_bypass_user()
+        return None
+
     if credentials is None:
         return None
 

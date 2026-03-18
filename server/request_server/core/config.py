@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     app_name: str = "aet-request-server"
     app_version: str = request_server_version
     debug: bool = False
+    auth_bypass: bool = False
     cors_origins: list[str] = [
         "http://localhost:5174",
         "http://localhost:3000",
