@@ -110,9 +110,7 @@ class ArtemisDevDescriptionBuilder:
                 field("Advisor", artemis_request.advisor),
                 field(
                     "Subteams",
-                    self._format_subteams(
-                        artemis_request.subteams, artemis_request.other_subteam
-                    ),
+                    self._format_subteams(artemis_request.subteams, artemis_request.other_subteam),
                 ),
             ]
         )
@@ -178,9 +176,7 @@ class ArtemisDevDescriptionBuilder:
 
     # ── Private helpers ─────────────────────────────────────────────────
 
-    def _format_subteams(
-        self, subteams: list[str], other_subteam: str | None
-    ) -> str:
+    def _format_subteams(self, subteams: list[str], other_subteam: str | None) -> str:
         formatted = []
         for team in subteams:
             if team == "other" and other_subteam:
@@ -192,9 +188,7 @@ class ArtemisDevDescriptionBuilder:
                 formatted.append(team_display)
         return ", ".join(formatted)
 
-    def _format_subteams_csv(
-        self, subteams: list[str], other_subteam: str | None
-    ) -> str:
+    def _format_subteams_csv(self, subteams: list[str], other_subteam: str | None) -> str:
         formatted = []
         for team in subteams:
             if team == "other" and other_subteam:
@@ -207,11 +201,7 @@ class ArtemisDevDescriptionBuilder:
         self, artemis_request: ArtemisDeveloperRequest, is_authenticated: bool
     ) -> str:
         if is_authenticated:
-            return (
-                artemis_request.requester_name
-                or artemis_request.requester_username
-                or "Unknown"
-            )
+            return artemis_request.requester_name or artemis_request.requester_username or "Unknown"
         return artemis_request.anonymous_name or "Unknown"
 
     def _get_requester_email(
@@ -274,9 +264,7 @@ async def handle_artemis_ticket_creation(
         await ticket_service.add_comment(
             CommentRequest(
                 ticket_key=ticket_key,
-                body=builder.build_comment(
-                    artemis_request, is_authenticated, requester_username
-                ),
+                body=builder.build_comment(artemis_request, is_authenticated, requester_username),
             )
         )
 

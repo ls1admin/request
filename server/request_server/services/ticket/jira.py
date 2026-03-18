@@ -95,14 +95,10 @@ class JiraTicketService(TicketService):
                 logger.info("Added comment to ticket %s", request.ticket_key)
                 return True
             except httpx.HTTPError as e:
-                logger.warning(
-                    "Failed to add comment to ticket %s: %s", request.ticket_key, e
-                )
+                logger.warning("Failed to add comment to ticket %s: %s", request.ticket_key, e)
                 return False
 
-    async def set_custom_field(
-        self, ticket_key: str, field_name: str, value: Any
-    ) -> bool:
+    async def set_custom_field(self, ticket_key: str, field_name: str, value: Any) -> bool:
         update_data = {"fields": {field_name: value}}
 
         async with httpx.AsyncClient() as client:
@@ -116,9 +112,7 @@ class JiraTicketService(TicketService):
                 logger.info("Set %s on ticket %s", field_name, ticket_key)
                 return True
             except httpx.HTTPError as e:
-                logger.warning(
-                    "Failed to set %s on ticket %s: %s", field_name, ticket_key, e
-                )
+                logger.warning("Failed to set %s on ticket %s: %s", field_name, ticket_key, e)
                 return False
 
     async def update_status(self, ticket_key: str, status: str) -> bool:

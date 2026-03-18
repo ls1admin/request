@@ -31,9 +31,7 @@ class NoOpTicketService(TicketService):
         )
         return True
 
-    async def set_custom_field(
-        self, ticket_key: str, field_name: str, value: Any
-    ) -> bool:
+    async def set_custom_field(self, ticket_key: str, field_name: str, value: Any) -> bool:
         logger.warning(
             "Ticket system is not configured, skipping field %s update (%s) for ticket: %s",
             field_name,

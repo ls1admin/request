@@ -128,13 +128,9 @@ async def create_vm_access_request(
             access_request.jira_ticket_key = ticket_key
             await db.commit()
             await db.refresh(access_request)
-            logger.info(
-                f"Created ticket {ticket_key} for VM access request {access_request.id}"
-            )
+            logger.info(f"Created ticket {ticket_key} for VM access request {access_request.id}")
         else:
-            logger.warning(
-                f"Failed to create ticket for VM access request {access_request.id}"
-            )
+            logger.warning(f"Failed to create ticket for VM access request {access_request.id}")
     except Exception as e:
         logger.error(f"Error creating ticket for VM access request {access_request.id}: {e}")
         # Don't fail the request if ticket creation fails

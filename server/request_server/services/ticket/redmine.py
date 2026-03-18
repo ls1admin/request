@@ -104,9 +104,7 @@ class RedmineTicketService(TicketService):
                         headers=self._get_headers(),
                     )
                     group_response.raise_for_status()
-                    logger.info(
-                        "Added user '%s' to group %s", username, self.group_id
-                    )
+                    logger.info("Added user '%s' to group %s", username, self.group_id)
 
                 return True
 
@@ -119,9 +117,7 @@ class RedmineTicketService(TicketService):
             )
             return False
         except httpx.HTTPError as e:
-            logger.error(
-                "Redmine user provisioning failed for '%s': %s", username, e
-            )
+            logger.error("Redmine user provisioning failed for '%s': %s", username, e)
             return False
 
     @staticmethod
@@ -198,9 +194,7 @@ class RedmineTicketService(TicketService):
                 )
                 return False
 
-    async def set_custom_field(
-        self, ticket_key: str, field_name: str, value: Any
-    ) -> bool:
+    async def set_custom_field(self, ticket_key: str, field_name: str, value: Any) -> bool:
         custom_fields = [{"id": int(field_name), "value": value}]
 
         async with httpx.AsyncClient() as client:
@@ -235,9 +229,7 @@ class RedmineTicketService(TicketService):
                     headers=self._get_headers(),
                 )
                 response.raise_for_status()
-                logger.info(
-                    "Updated Redmine issue #%s to status %s", ticket_key, status
-                )
+                logger.info("Updated Redmine issue #%s to status %s", ticket_key, status)
                 return True
             except httpx.HTTPError as e:
                 logger.warning(

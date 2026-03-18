@@ -28,9 +28,7 @@ class VMRequestDescriptionBuilder:
     def build_summary(self, vm_request: VMRequest) -> str:
         return f"[VM Request] {vm_request.hostname} - {vm_request.requester_username}"
 
-    def build_description(
-        self, vm_request: VMRequest, public_key: str | None = None
-    ) -> str:
+    def build_description(self, vm_request: VMRequest, public_key: str | None = None) -> str:
         sections = [
             heading(2, "VM Request Details"),
             "",

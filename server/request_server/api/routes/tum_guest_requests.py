@@ -123,9 +123,7 @@ async def create_tum_guest_request(
             guest_request.jira_ticket_key = ticket_key
             await db.commit()
             await db.refresh(guest_request)
-            logger.info(
-                f"Created ticket {ticket_key} for TUM guest request {guest_request.id}"
-            )
+            logger.info(f"Created ticket {ticket_key} for TUM guest request {guest_request.id}")
         else:
             logger.warning(f"Failed to create ticket for TUM guest request {guest_request.id}")
     except Exception as e:

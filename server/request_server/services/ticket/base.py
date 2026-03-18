@@ -55,9 +55,7 @@ class TicketService(ABC):
         ...
 
     @abstractmethod
-    async def set_custom_field(
-        self, ticket_key: str, field_name: str, value: Any
-    ) -> bool:
+    async def set_custom_field(self, ticket_key: str, field_name: str, value: Any) -> bool:
         """Set a custom field on a ticket.
 
         This is a generic escape hatch for system-specific fields
