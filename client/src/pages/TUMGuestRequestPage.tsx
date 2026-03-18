@@ -28,7 +28,7 @@ type SubmitResult = SubmitResultSuccess | SubmitResultError | null;
 
 export function TUMGuestRequestPage() {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<SubmitResult>(null);
 
@@ -166,6 +166,14 @@ export function TUMGuestRequestPage() {
         onTryAgain={() => setSubmitResult(null)}
         onBack={() => navigate("/")}
       />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
     );
   }
 

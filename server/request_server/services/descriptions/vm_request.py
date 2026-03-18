@@ -118,18 +118,20 @@ class VMRequestDescriptionBuilder:
                 [
                     field("Project Type", "Thesis"),
                     field("Study Level", details.get("study_level", "N/A")),
-                    field("Supervisor", details.get("supervisor", "N/A")),
-                    field("Working Title", details.get("working_title", "N/A")),
+                    field("Advisor", details.get("advisor", "N/A")),
+                    field("Working Title", details.get("title", "N/A")),
                 ]
             )
         if project_type == "chair_project":
-            return "\n".join(
-                [
-                    field("Project Type", "Chair Project"),
-                    field("Project Name", details.get("project_name", "N/A")),
-                    field("Responsible Person", details.get("responsible_person", "N/A")),
-                ]
-            )
+            lines = [
+                field("Project Type", "Chair Project"),
+                field("Project Name", details.get("project_name", "N/A")),
+                field("Project Description", details.get("project_description", "N/A")),
+            ]
+            responsible = details.get("responsible_person")
+            if responsible:
+                lines.append(field("Responsible Person", responsible))
+            return "\n".join(lines)
         return f"{field('Project Type', project_type)}\n{field('Details', str(details))}"
 
     def _format_ports(self, vm_request: VMRequest) -> str:

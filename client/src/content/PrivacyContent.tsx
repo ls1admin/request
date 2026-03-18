@@ -42,7 +42,7 @@ export function PrivacyContent() {
         </li>
         <li>
           <strong>VM Request data:</strong> Hostname, project details (team
-          name, thesis title, supervisor), SSH public keys, and usernames of
+          name, thesis title, project name, responsible person), SSH public keys, and usernames of
           additional users.
         </li>
         <li>

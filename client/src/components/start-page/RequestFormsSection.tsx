@@ -28,7 +28,7 @@ const requestForms = [
       "Request developer access to the Artemis learning platform for contributions.",
     icon: Code,
     to: "/request/artemis",
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     id: "tum-guest",

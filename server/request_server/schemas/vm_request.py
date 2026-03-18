@@ -50,8 +50,9 @@ class ThesisDetails(BaseModel):
 
 
 class ChairProjectDetails(BaseModel):
-    supervisor: str = Field(..., min_length=1)
+    project_name: str = Field(..., min_length=1, alias="projectName")
     project_description: str = Field(..., min_length=1, alias="projectDescription")
+    responsible_person: str | None = Field(None, alias="responsiblePerson")
 
     model_config = ConfigDict(populate_by_name=True)
 

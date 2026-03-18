@@ -28,17 +28,13 @@ _GENDER_MAP = {"male": "Male", "female": "Female", "diverse": "Diverse"}
 class TUMGuestRequestDescriptionBuilder:
     """Builds summary, description, and welcome comment for TUM guest requests."""
 
-    def build_summary(
-        self, guest_request: TUMGuestRequest, is_authenticated: bool
-    ) -> str:
+    def build_summary(self, guest_request: TUMGuestRequest, is_authenticated: bool) -> str:
         guest_name = f"{guest_request.guest_first_name} {guest_request.guest_last_name}"
         if is_authenticated:
             return f"[TUM Guest] {guest_name} (requested by {guest_request.requester_username})"
         return f"[TUM Guest] {guest_name} (anonymous request)"
 
-    def build_description(
-        self, guest_request: TUMGuestRequest, is_authenticated: bool
-    ) -> str:
+    def build_description(self, guest_request: TUMGuestRequest, is_authenticated: bool) -> str:
         sections = [
             heading(2, "TUM Guest Account Request"),
             "",
@@ -72,9 +68,7 @@ class TUMGuestRequestDescriptionBuilder:
                 sections.append(italic("Anonymous user requesting account for themselves."))
             else:
                 sections.append(italic("Anonymous user requesting account for someone else."))
-            sections.append(
-                field("Contact Person at TUM", guest_request.contact_person or "N/A")
-            )
+            sections.append(field("Contact Person at TUM", guest_request.contact_person or "N/A"))
 
         # Guest personal information
         sections.extend(
@@ -87,9 +81,11 @@ class TUMGuestRequestDescriptionBuilder:
                 field("Date of Birth", guest_request.guest_birth_date.strftime("%Y-%m-%d")),
                 field(
                     "Gender",
-                    _GENDER_MAP.get(guest_request.guest_gender.value, guest_request.guest_gender.value),
+                    _GENDER_MAP.get(
+                        guest_request.guest_gender.value, guest_request.guest_gender.value
+                    ),
                 ),
-                field("Nationality", guest_request.guest_nationality),
+                field("Nationality", guest_request.guest_nationality.title()),
             ]
         )
 

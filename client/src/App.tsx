@@ -24,14 +24,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/request/artemis"
-            element={
-              <ProtectedRoute>
-                <ArtemisRequestPage />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/request/artemis" element={<ArtemisRequestPage />} />
           <Route
             path="/request/vm-access"
             element={

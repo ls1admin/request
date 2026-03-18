@@ -1,18 +1,26 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LogIn, UserX } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArtemisRequestForm } from "@/components/artemis-request/ArtemisRequestForm";
 import { RequestErrorCard } from "@/components/shared/RequestErrorCard";
 import { RequestSuccessCard } from "@/components/shared/RequestSuccessCard";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { submitArtemisRequest } from "@/lib/api";
 import type { ArtemisRequest, GitHubUser } from "@/types/artemis-request";
 
 export function ArtemisRequestPage() {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading, login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [continueAnonymous, setContinueAnonymous] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     requestId?: string;
@@ -85,6 +93,54 @@ export function ArtemisRequestPage() {
         onTryAgain={() => setSubmitResult(null)}
         onBack={() => navigate("/")}
       />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated && !continueAnonymous) {
+    return (
+      <div className="container mx-auto max-w-lg px-4 py-8">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/")}
+          className="mb-8"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Sign in to continue</CardTitle>
+            <CardDescription>
+              If you have a TUM account, please sign in first. This will
+              pre-fill your information and link the request to your account.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <Button onClick={login} className="w-full gap-2">
+              <LogIn className="h-4 w-4" />
+              Sign in with TUM account
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setContinueAnonymous(true)}
+              className="w-full gap-2"
+            >
+              <UserX className="h-4 w-4" />
+              Continue without sign in
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

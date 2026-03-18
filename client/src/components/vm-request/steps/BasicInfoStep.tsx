@@ -226,12 +226,12 @@ export function BasicInfoStep() {
 
           <FormField
             control={form.control}
-            name="chairProject.supervisor"
+            name="chairProject.projectName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Supervisor</FormLabel>
+                <FormLabel>Project Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter supervisor name" {...field} />
+                  <Input placeholder="Enter project name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -250,6 +250,20 @@ export function BasicInfoStep() {
                     className="min-h-[100px]"
                     {...field}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="chairProject.responsiblePerson"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Responsible Person (Optional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter responsible person" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

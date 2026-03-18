@@ -38,8 +38,9 @@ export const thesisSchema = z.object({
 });
 
 export const chairProjectSchema = z.object({
-  supervisor: z.string().min(1, "Supervisor name is required"),
+  projectName: z.string().min(1, "Project name is required"),
   projectDescription: z.string().min(1, "Project description is required"),
+  responsiblePerson: z.string().optional(),
 });
 
 // Partial schemas for form state - allows empty values when project type is not selected
@@ -60,8 +61,9 @@ const thesisPartialSchema = z
 
 const chairProjectPartialSchema = z
   .object({
-    supervisor: z.string().optional(),
+    projectName: z.string().optional(),
     projectDescription: z.string().optional(),
+    responsiblePerson: z.string().optional(),
   })
   .optional();
 
@@ -138,7 +140,7 @@ const addProjectFieldErrors = (
     projectType: ProjectType;
     ipraktikum?: { teamName?: string; coachName?: string };
     thesis?: { studyLevel?: string; title?: string; advisor?: string };
-    chairProject?: { supervisor?: string; projectDescription?: string };
+    chairProject?: { projectName?: string; projectDescription?: string; responsiblePerson?: string };
   },
   ctx: z.RefinementCtx,
 ) => {
@@ -184,11 +186,11 @@ const addProjectFieldErrors = (
   }
 
   if (data.projectType === "chair_project") {
-    if (!data.chairProject?.supervisor?.trim()) {
+    if (!data.chairProject?.projectName?.trim()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Supervisor name is required",
-        path: ["chairProject", "supervisor"],
+        message: "Project name is required",
+        path: ["chairProject", "projectName"],
       });
     }
     if (!data.chairProject?.projectDescription?.trim()) {

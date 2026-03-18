@@ -5,7 +5,7 @@ import {
   Info,
   Loader2,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -66,13 +66,12 @@ export function GitHubStep({ onVerificationChange }: GitHubStepProps) {
     }
   }, [form, onVerificationChange]);
 
-  // Clear verification when username changes
-  useEffect(() => {
+  const clearVerification = useCallback(() => {
     if (verification) {
       setVerification(null);
       onVerificationChange?.(null);
     }
-  }, [onVerificationChange, verification]);
+  }, [verification, onVerificationChange]);
 
   return (
     <div className="space-y-6">
@@ -89,7 +88,14 @@ export function GitHubStep({ onVerificationChange }: GitHubStepProps) {
             <FormLabel>GitHub Username</FormLabel>
             <div className="flex gap-2">
               <FormControl>
-                <Input placeholder="your-github-username" {...field} />
+                <Input
+                  placeholder="your-github-username"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    clearVerification();
+                  }}
+                />
               </FormControl>
               <Button
                 type="button"
