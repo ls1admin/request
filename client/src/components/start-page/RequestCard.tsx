@@ -49,7 +49,7 @@ export function RequestCard({
         <div className="flex items-start justify-between">
           <Icon className="h-8 w-8 text-primary transition-transform group-hover:scale-110" />
           {isLocked && (
-            <Badge variant="secondary" className="gap-1">
+            <Badge variant="highlighted" className="gap-1">
               <Lock className="h-3 w-3" />
               Sign in required
             </Badge>
