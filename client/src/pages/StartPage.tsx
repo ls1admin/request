@@ -3,6 +3,7 @@ import { ExternalLinksAdmin } from "@/components/admin/ExternalLinksAdmin";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ExternalLinksSection } from "@/components/start-page/ExternalLinksSection";
 import { RequestFormsSection } from "@/components/start-page/RequestFormsSection";
+import { SupportSection } from "@/components/start-page/SupportSection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
@@ -79,6 +80,7 @@ export function StartPage() {
   return (
     <PageLayout onAdminSettingsClick={handleAdminSettingsClick}>
       <RequestFormsSection />
+      <SupportSection />
       <ExternalLinksSection links={links} />
     </PageLayout>
   );

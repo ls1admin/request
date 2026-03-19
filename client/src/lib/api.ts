@@ -1,5 +1,6 @@
 import { artemisDeveloperRequestsService } from "@/services/artemis-developer-requests";
 import { sshKeysService } from "@/services/ssh-keys";
+import { supportRequestsService } from "@/services/support-requests";
 import { tumGuestRequestsService } from "@/services/tum-guest-requests";
 import { vmAccessRequestsService } from "@/services/vm-access-requests";
 import { vmRequestsService } from "@/services/vm-requests";
@@ -8,6 +9,7 @@ import type {
   GitHubUser,
   GitHubVerificationResult,
 } from "@/types/artemis-request";
+import type { SupportRequest } from "@/types/support-request";
 import type { TUMGuestRequest } from "@/types/tum-guest-request";
 import type { VMAccessRequest } from "@/types/vm-access-request";
 import type { StoredSSHKey, VMRequest } from "@/types/vm-request";
@@ -239,6 +241,42 @@ export async function submitVMAccessRequest(
     };
   } catch (error) {
     console.error("Failed to submit VM access request:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to submit request",
+    };
+  }
+}
+
+export type SupportRequestSubmission = SupportRequest & {
+  user?: {
+    id: string;
+    email: string | null;
+    username: string | null;
+    fullName: string | null;
+  };
+};
+
+/**
+ * Submits a support request to the backend API
+ * Supports both authenticated and anonymous requests
+ */
+export async function submitSupportRequest(
+  request: SupportRequestSubmission,
+): Promise<APIResponse<{ requestId: string; ticketUrl: string | null }>> {
+  try {
+    const { user: _user, ...supportRequestData } = request;
+    const response = await supportRequestsService.create(supportRequestData);
+    return {
+      success: true,
+      data: {
+        requestId: response.id,
+        ticketUrl: response.ticket_url,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to submit support request:", error);
     return {
       success: false,
       error:

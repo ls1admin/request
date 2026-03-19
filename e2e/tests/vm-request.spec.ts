@@ -41,7 +41,7 @@ test.describe("VM Request Form", () => {
     expect(ticket.summary).toContain("[VM Request]");
     expect(ticket.summary).toContain("e2e-iprak-high");
     expect(ticket.description).toContain("**CPU Cores:** 8");
-    expect(ticket.description).toContain("**RAM:** 16 GB");
+    expect(ticket.description).toContain("**RAM:** 8 GB");
     expect(ticket.description).toContain("Resource Justification");
     expect(ticket.description).toContain("Team Beta");
     expect(ticket.description).toContain("Dr. Johnson");
@@ -77,8 +77,8 @@ test.describe("VM Request Form", () => {
     expect(ticket.description).toContain("MA");
     expect(ticket.description).toContain("Machine Learning Pipeline Optimization");
     expect(ticket.description).toContain("Dr. Weber");
-    expect(ticket.description).toContain("**CPU Cores:** 16");
-    expect(ticket.description).toContain("**RAM:** 32 GB");
+    expect(ticket.description).toContain("**CPU Cores:** 8");
+    expect(ticket.description).toContain("**RAM:** 8 GB");
     expect(ticket.description).toContain("8080");
     expect(ticket.description).toContain("5432");
     expect(ticket.description).toContain("collaborator1");

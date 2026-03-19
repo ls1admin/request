@@ -102,13 +102,13 @@ export const resourcesSchema = z
     cpuCores: z
       .number()
       .int()
-      .min(1, "At least 1 CPU core required")
-      .max(32, "Maximum 32 CPU cores"),
+      .min(2, "At least 2 CPU core required")
+      .max(8, "Maximum 8 CPU cores"),
     ramGB: z
       .number()
       .int()
-      .min(1, "At least 1 GB RAM required")
-      .max(64, "Maximum 64 GB RAM"),
+      .min(2, "At least 2 GB RAM required")
+      .max(8, "Maximum 8 GB RAM"),
     justification: z.string().optional(),
   })
   .refine(

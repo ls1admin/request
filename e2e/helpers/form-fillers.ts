@@ -6,6 +6,7 @@ import {
   type VMAccessTestConfig,
   type ArtemisTestConfig,
   type TUMGuestTestConfig,
+  type SupportTestConfig,
 } from "../fixtures/test-data";
 import { FAKE_TOKEN } from "../fixtures/auth";
 
@@ -425,6 +426,43 @@ export async function fillTUMGuestForm(
   await clickNext(page);
 
   // Review step
+  await clickSubmit(page);
+  await waitForSuccess(page);
+}
+
+// ── Support Request form filler ───────────────────────────────────────────
+
+export async function fillSupportForm(
+  page: Page,
+  config: SupportTestConfig,
+): Promise<void> {
+  await navigateFromHome(page, "Support Request");
+
+  // Auth choice (anonymous only): click "Continue without sign in"
+  if (!config.isAuthenticated) {
+    await page.getByRole("button", { name: "Continue without sign in" }).click();
+    await page.waitForTimeout(300);
+  }
+
+  // Anonymous identity fields
+  if (!config.isAuthenticated) {
+    await page.getByPlaceholder("Your full name").fill(config.fullName!);
+    await page.getByPlaceholder("your.email@example.com").fill(config.email!);
+    if (config.tumId) {
+      await page.getByPlaceholder("e.g., ab12cde").fill(config.tumId);
+    }
+  }
+
+  // Support details
+  await page.getByPlaceholder("Brief summary of your request").fill(config.subject);
+
+  // Select category via radio card
+  await selectRadioCard(page, `cat-${config.category}`);
+
+  await page
+    .getByPlaceholder("Please describe your issue or request in detail")
+    .fill(config.description);
+
   await clickSubmit(page);
   await waitForSuccess(page);
 }

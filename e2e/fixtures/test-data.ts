@@ -62,7 +62,7 @@ export const VM_REQUEST_CONFIGS: Record<string, VMRequestTestConfig> = {
     coachName: "Dr. Johnson",
     projectLead: "Erika Musterfrau",
     cpuCores: 8,
-    ramGb: 16,
+    ramGb: 8,
     justification: "Running large-scale integration tests requires extra resources",
     sshKeyType: "existing",
   },
@@ -85,8 +85,8 @@ export const VM_REQUEST_CONFIGS: Record<string, VMRequestTestConfig> = {
     studyLevel: "MA",
     thesisTitle: "Machine Learning Pipeline Optimization",
     advisor: "Dr. Weber",
-    cpuCores: 16,
-    ramGb: 32,
+    cpuCores: 8,
+    ramGb: 8,
     justification: "ML training requires significant compute resources",
     additionalPorts: [
       { port: 8080, protocol: "tcp", reason: "Model serving API" },
@@ -114,7 +114,7 @@ export const VM_REQUEST_CONFIGS: Record<string, VMRequestTestConfig> = {
     projectDescription: "Production environment for research prototype",
     responsiblePerson: "Prof. Bauer",
     cpuCores: 8,
-    ramGb: 16,
+    ramGb: 8,
     justification: "Running multiple containers for microservice architecture",
     additionalPorts: [
       { port: 3000, protocol: "tcp", reason: "Frontend dev server" },
@@ -359,5 +359,51 @@ export const TUM_GUEST_CONFIGS: Record<string, TUMGuestTestConfig> = {
     guestType: "other",
     otherReason: "Research collaboration on quantum computing project requiring TUM system access",
     additionalComments: "Arriving in April, need account ready by then",
+  },
+};
+
+// ── Support Request test data ────────────────────────────────────────────
+
+export interface SupportTestConfig {
+  isAuthenticated: boolean;
+  // Anonymous fields
+  fullName?: string;
+  email?: string;
+  tumId?: string;
+  // Support details
+  subject: string;
+  category: "bug" | "feature_request" | "question" | "other";
+  description: string;
+}
+
+export const SUPPORT_CONFIGS: Record<string, SupportTestConfig> = {
+  auth_bug: {
+    isAuthenticated: true,
+    subject: "VM not reachable via SSH",
+    category: "bug",
+    description: "I cannot connect to my VM via SSH since this morning. The connection times out after 30 seconds.",
+  },
+  auth_question: {
+    isAuthenticated: true,
+    subject: "How to increase VM disk space",
+    category: "question",
+    description: "My VM is running low on disk space. How can I request an increase in storage capacity?",
+  },
+  anon_feature_request: {
+    isAuthenticated: false,
+    fullName: "External Researcher",
+    email: "researcher@partner-uni.edu",
+    tumId: "ext42abc",
+    subject: "Support for GPU passthrough",
+    category: "feature_request",
+    description: "It would be very helpful to have GPU passthrough support for machine learning workloads on VMs.",
+  },
+  anon_other_no_tumid: {
+    isAuthenticated: false,
+    fullName: "Guest User",
+    email: "guest@example.com",
+    subject: "General inquiry about services",
+    category: "other",
+    description: "I would like to know more about the services offered by AET and how to get started as a new collaborator.",
   },
 };

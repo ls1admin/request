@@ -45,9 +45,9 @@ export function RequestCard({
       className="group cursor-pointer transition-all hover:border-primary hover:bg-muted/50 hover:shadow-md"
       onClick={handleClick}
     >
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1 pt-3 2xl:pb-2 2xl:pt-6">
         <div className="flex items-start justify-between">
-          <Icon className="h-8 w-8 text-primary transition-transform group-hover:scale-110" />
+          <Icon className="h-5 w-5 2xl:h-8 2xl:w-8 text-primary transition-transform group-hover:scale-110" />
           {isLocked && (
             <Badge variant="highlighted" className="gap-1">
               <Lock className="h-3 w-3" />
@@ -55,10 +55,12 @@ export function RequestCard({
             </Badge>
           )}
         </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
+        <CardTitle className="text-sm 2xl:text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <CardDescription>{description}</CardDescription>
+      <CardContent className="pb-3 pt-0 2xl:pb-6">
+        <CardDescription className="text-xs 2xl:text-sm">
+          {description}
+        </CardDescription>
       </CardContent>
     </Card>
   );

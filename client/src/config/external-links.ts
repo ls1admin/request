@@ -36,11 +36,4 @@ export const externalLinks: ExternalLink[] = [
     description: "Health and status of all AET services",
     enabled: true,
   },
-  {
-    id: "support",
-    label: "Open Support Ticket",
-    url: "https://redmine.aet.cit.tum.de",
-    description: "Technical support and issue reporting",
-    enabled: true,
-  },
 ];

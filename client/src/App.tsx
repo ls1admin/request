@@ -6,6 +6,7 @@ import { ArtemisRequestPage } from "@/pages/ArtemisRequestPage";
 import { ImprintPage } from "@/pages/ImprintPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
 import { StartPage } from "@/pages/StartPage";
+import { SupportRequestPage } from "@/pages/SupportRequestPage";
 import { TUMGuestRequestPage } from "@/pages/TUMGuestRequestPage";
 import { VMAccessRequestPage } from "@/pages/VMAccessRequestPage";
 import { VMRequestPage } from "@/pages/VMRequestPage";
@@ -34,6 +35,7 @@ function App() {
             }
           />
           <Route path="/request/tum-guest" element={<TUMGuestRequestPage />} />
+          <Route path="/request/support" element={<SupportRequestPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/imprint" element={<ImprintPage />} />
