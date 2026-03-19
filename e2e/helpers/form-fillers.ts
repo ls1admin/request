@@ -9,7 +9,7 @@ import {
 } from "../fixtures/test-data";
 import { FAKE_TOKEN } from "../fixtures/auth";
 
-const SERVER_URL = "http://localhost:8009";
+import { SERVER_URL } from "../playwright.config";
 
 // ── Navigation helpers ────────────────────────────────────────────────────
 
@@ -155,6 +155,7 @@ export async function fillVMRequestForm(
   if (config.projectType === "ipraktikum") {
     await page.getByPlaceholder("Enter team name").fill(config.teamName!);
     await page.getByPlaceholder("Enter coach name").fill(config.coachName!);
+    await page.getByPlaceholder("Enter project lead name").fill(config.projectLead!);
   } else if (config.projectType === "thesis") {
     await selectRadioCard(page, `level-${config.studyLevel}`);
     await page.getByPlaceholder("Enter thesis title").fill(config.thesisTitle!);
@@ -205,6 +206,16 @@ export async function fillVMRequestForm(
       // Fill reason
       const reasonInputs = page.getByPlaceholder("Why is this port needed?");
       await reasonInputs.last().fill(port.reason);
+      // Public access
+      if (port.publicAccess) {
+        const publicCheckboxes = page.getByLabel("Publicly accessible");
+        await publicCheckboxes.last().check();
+        await page.waitForTimeout(200);
+        const justificationInputs = page.getByPlaceholder(
+          "Why does this port need to be publicly accessible?",
+        );
+        await justificationInputs.last().fill(port.publicJustification!);
+      }
     }
   }
 

@@ -22,6 +22,7 @@ test.describe("VM Request Form", () => {
     expect(ticket.description).toContain("iPraktikum");
     expect(ticket.description).toContain("**Team Name:** Team Alpha");
     expect(ticket.description).toContain("**Coach Name:** Prof. Smith");
+    expect(ticket.description).toContain("**Project Lead (PL):** Max Mustermann");
     expect(ticket.description).toContain("**CPU Cores:** 4");
     expect(ticket.description).toContain("**RAM:** 4 GB");
     expect(ticket.reporter_username).toBe("testuser");
@@ -44,6 +45,7 @@ test.describe("VM Request Form", () => {
     expect(ticket.description).toContain("Resource Justification");
     expect(ticket.description).toContain("Team Beta");
     expect(ticket.description).toContain("Dr. Johnson");
+    expect(ticket.description).toContain("Erika Musterfrau");
   });
 
   test("Thesis BA - default resources, additional port", async ({

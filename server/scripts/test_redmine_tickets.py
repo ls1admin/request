@@ -182,9 +182,7 @@ async def create_vm_access_ticket(ticket_service: Any) -> str | None:
 
     req = fake_vm_access_request()
     logger.info("Creating VM Access Request ticket for '%s'...", req.hostname)
-    key = await handle_vm_access_ticket_creation(
-        ticket_service, req, public_key=req.ssh_key_value
-    )
+    key = await handle_vm_access_ticket_creation(ticket_service, req, public_key=req.ssh_key_value)
     return key
 
 
@@ -219,9 +217,7 @@ async def create_artemis_ticket(ticket_service: Any, *, authenticated: bool = Tr
     return key
 
 
-async def create_tum_guest_ticket(
-    ticket_service: Any, *, authenticated: bool = True
-) -> str | None:
+async def create_tum_guest_ticket(ticket_service: Any, *, authenticated: bool = True) -> str | None:
     from request_server.services.descriptions.tum_guest_request import (
         TUMGuestRequestDescriptionBuilder,
         handle_tum_guest_ticket_creation,
@@ -301,10 +297,7 @@ async def main() -> None:
     ticket_service = get_ticket_service()
 
     # Determine which types to run
-    if args.type == "all":
-        types_to_run = list(TICKET_TYPES.keys())
-    else:
-        types_to_run = [args.type]
+    types_to_run = list(TICKET_TYPES.keys()) if args.type == "all" else [args.type]
 
     results: list[tuple[str, str | None]] = []
 

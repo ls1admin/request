@@ -37,6 +37,7 @@ class RequestStatus(StrEnum):
 class IPraktikumDetails(BaseModel):
     team_name: str = Field(..., min_length=1, alias="teamName")
     coach_name: str = Field(..., min_length=1, alias="coachName")
+    project_lead: str = Field(..., min_length=1, alias="projectLead")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -79,6 +80,16 @@ class AdditionalPort(BaseModel):
     port: int = Field(..., ge=1, le=65535)
     protocol: Protocol
     reason: str = Field(..., min_length=1)
+    public_access: bool = Field(default=False, alias="publicAccess")
+    public_justification: str | None = Field(None, alias="publicJustification")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    @model_validator(mode="after")
+    def validate_public_justification(self):
+        if self.public_access and not self.public_justification:
+            raise ValueError("Justification is required for publicly accessible ports")
+        return self
 
 
 class Firewall(BaseModel):

@@ -13,6 +13,7 @@ export interface VMRequestTestConfig {
   // iPraktikum fields
   teamName?: string;
   coachName?: string;
+  projectLead?: string;
   // Thesis fields
   studyLevel?: "BA" | "MA";
   thesisTitle?: string;
@@ -31,6 +32,8 @@ export interface VMRequestTestConfig {
     port: number;
     protocol: "tcp" | "udp";
     reason: string;
+    publicAccess?: boolean;
+    publicJustification?: string;
   }>;
   // Users
   additionalUsers?: string[];
@@ -48,6 +51,7 @@ export const VM_REQUEST_CONFIGS: Record<string, VMRequestTestConfig> = {
     projectType: "ipraktikum",
     teamName: "Team Alpha",
     coachName: "Prof. Smith",
+    projectLead: "Max Mustermann",
     sshKeyType: "new",
   },
   ipraktikum_high_resources: {
@@ -56,6 +60,7 @@ export const VM_REQUEST_CONFIGS: Record<string, VMRequestTestConfig> = {
     projectType: "ipraktikum",
     teamName: "Team Beta",
     coachName: "Dr. Johnson",
+    projectLead: "Erika Musterfrau",
     cpuCores: 8,
     ramGb: 16,
     justification: "Running large-scale integration tests requires extra resources",

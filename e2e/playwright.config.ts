@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const SERVER_PORT = 8009;
-const CLIENT_PORT = 5174;
+const SERVER_PORT = 8001;
+const CLIENT_PORT = 5715;
 const SERVER_URL = `http://localhost:${SERVER_PORT}`;
 const CLIENT_URL = `http://localhost:${CLIENT_PORT}`;
 
@@ -42,7 +42,7 @@ export default defineConfig({
       },
     },
     {
-      command: `cd ../client && VITE_API_BASE_URL=${SERVER_URL}/api/v1 VITE_KEYCLOAK_URL=http://localhost:18080 VITE_KEYCLOAK_REALM=tum VITE_KEYCLOAK_CLIENT_ID=requestaccess npm run dev`,
+      command: `cd ../client && VITE_API_BASE_URL=${SERVER_URL}/api/v1 VITE_KEYCLOAK_URL=http://localhost:18080 VITE_KEYCLOAK_REALM=tum VITE_KEYCLOAK_CLIENT_ID=requestaccess npm run dev -- --port ${CLIENT_PORT}`,
       port: CLIENT_PORT,
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,

@@ -29,6 +29,7 @@ export const hostnameSchema = z
 export const ipraktikumSchema = z.object({
   teamName: z.string().min(1, "Team name is required"),
   coachName: z.string().min(1, "Coach name is required"),
+  projectLead: z.string().min(1, "Project lead is required"),
 });
 
 export const thesisSchema = z.object({
@@ -48,6 +49,7 @@ const ipraktikumPartialSchema = z
   .object({
     teamName: z.string().optional(),
     coachName: z.string().optional(),
+    projectLead: z.string().optional(),
   })
   .optional();
 
@@ -67,15 +69,33 @@ const chairProjectPartialSchema = z
   })
   .optional();
 
-export const additionalPortSchema = z.object({
-  port: z
-    .number()
-    .int()
-    .min(1, "Port must be at least 1")
-    .max(65535, "Port must be at most 65535"),
-  protocol: z.enum(protocols),
-  reason: z.string().min(1, "Reason is required for additional ports"),
-});
+export const additionalPortSchema = z
+  .object({
+    port: z
+      .number()
+      .int()
+      .min(1, "Port must be at least 1")
+      .max(65535, "Port must be at most 65535"),
+    protocol: z.enum(protocols),
+    reason: z.string().min(1, "Reason is required for additional ports"),
+    publicAccess: z.boolean().default(false),
+    publicJustification: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.publicAccess) {
+        return (
+          !!data.publicJustification &&
+          data.publicJustification.trim().length > 0
+        );
+      }
+      return true;
+    },
+    {
+      message: "Justification is required for publicly accessible ports",
+      path: ["publicJustification"],
+    },
+  );
 
 export const resourcesSchema = z
   .object({
@@ -138,7 +158,11 @@ const baseVMRequestSchema = z.object({
 const addProjectFieldErrors = (
   data: {
     projectType: ProjectType;
-    ipraktikum?: { teamName?: string; coachName?: string };
+    ipraktikum?: {
+      teamName?: string;
+      coachName?: string;
+      projectLead?: string;
+    };
     thesis?: { studyLevel?: string; title?: string; advisor?: string };
     chairProject?: {
       projectName?: string;
@@ -161,6 +185,13 @@ const addProjectFieldErrors = (
         code: z.ZodIssueCode.custom,
         message: "Coach name is required",
         path: ["ipraktikum", "coachName"],
+      });
+    }
+    if (!data.ipraktikum?.projectLead?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Project lead is required",
+        path: ["ipraktikum", "projectLead"],
       });
     }
   }

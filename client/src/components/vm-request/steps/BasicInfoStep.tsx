@@ -156,6 +156,20 @@ export function BasicInfoStep() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="ipraktikum.projectLead"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Project Lead (PL)</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter project lead name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
       )}
 

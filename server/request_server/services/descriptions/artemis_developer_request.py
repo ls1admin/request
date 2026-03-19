@@ -97,9 +97,7 @@ class ArtemisDevDescriptionBuilder:
         if artemis_request.github_name:
             sections.append(field("GitHub Display Name", artemis_request.github_name))
 
-        sections.append(
-            field("Profile Verified", "Yes - GitHub profile exists and was verified")
-        )
+        sections.append(field("Profile Verified", "Yes - GitHub profile exists and was verified"))
 
         # Artemis details
         sections.extend(
@@ -266,7 +264,9 @@ async def handle_artemis_ticket_creation(
             await ticket_service.add_comment(
                 CommentRequest(
                     ticket_key=ticket_key,
-                    body=builder.build_comment(artemis_request, is_authenticated, requester_username),
+                    body=builder.build_comment(
+                        artemis_request, is_authenticated, requester_username
+                    ),
                 )
             )
 

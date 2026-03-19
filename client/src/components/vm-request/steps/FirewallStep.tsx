@@ -1,5 +1,6 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Info, Plus, Trash2 } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -29,7 +30,13 @@ export function FirewallStep() {
   });
 
   const addPort = () => {
-    append({ port: 8080, protocol: "tcp", reason: "" });
+    append({
+      port: 8080,
+      protocol: "tcp",
+      reason: "",
+      publicAccess: false,
+      publicJustification: "",
+    });
   };
 
   return (
@@ -38,6 +45,16 @@ export function FirewallStep() {
         title="Firewall Configuration"
         description="Configure which ports should be open on your VM."
       />
+
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertTitle>eduVPN only</AlertTitle>
+        <AlertDescription>
+          All ports are by default only accessible via the eduVPN. Making a port
+          publicly accessible requires justification and is only granted in
+          exceptional cases.
+        </AlertDescription>
+      </Alert>
 
       <FormField
         control={form.control}
@@ -76,91 +93,136 @@ export function FirewallStep() {
 
         {fields.length > 0 && (
           <div className="space-y-4">
-            {fields.map((field, index) => (
-              <div
-                key={field.id}
-                className="grid gap-4 rounded-lg border p-4 sm:grid-cols-[1fr_1fr_2fr_auto]"
-              >
-                <FormField
-                  control={form.control}
-                  name={`firewall.additionalPorts.${index}.port`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Port</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min={1}
-                          max={65535}
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(Number(e.target.value))
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            {fields.map((field, index) => {
+              const publicAccess = form.watch(
+                `firewall.additionalPorts.${index}.publicAccess`,
+              );
+              return (
+                <div key={field.id} className="space-y-4 rounded-lg border p-4">
+                  <div className="grid gap-4 sm:grid-cols-[1fr_1fr_2fr_auto]">
+                    <FormField
+                      control={form.control}
+                      name={`firewall.additionalPorts.${index}.port`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Port</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min={1}
+                              max={65535}
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name={`firewall.additionalPorts.${index}.protocol`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Protocol</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
+                    <FormField
+                      control={form.control}
+                      name={`firewall.additionalPorts.${index}.protocol`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Protocol</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select protocol" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {protocols.map((protocol) => (
+                                <SelectItem key={protocol} value={protocol}>
+                                  {protocol.toUpperCase()}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`firewall.additionalPorts.${index}.reason`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Reason</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Why is this port needed?"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <div className="flex items-end">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => remove(index)}
+                        className="text-destructive hover:text-destructive"
                       >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name={`firewall.additionalPorts.${index}.publicAccess`}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select protocol" />
-                          </SelectTrigger>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
                         </FormControl>
-                        <SelectContent>
-                          {protocols.map((protocol) => (
-                            <SelectItem key={protocol} value={protocol}>
-                              {protocol.toUpperCase()}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Publicly accessible</FormLabel>
+                          <FormDescription>
+                            Open this port to all network traffic, not just
+                            eduVPN
+                          </FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name={`firewall.additionalPorts.${index}.reason`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Reason</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Why is this port needed?"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                  {publicAccess && (
+                    <FormField
+                      control={form.control}
+                      name={`firewall.additionalPorts.${index}.publicJustification`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Public access justification</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Why does this port need to be publicly accessible?"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   )}
-                />
-
-                <div className="flex items-end">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => remove(index)}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 

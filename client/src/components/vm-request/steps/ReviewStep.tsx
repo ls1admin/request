@@ -63,6 +63,10 @@ export function ReviewStep() {
         <ReviewSection title="iPraktikum Details">
           <ReviewRow label="Team" value={data.ipraktikum.teamName} />
           <ReviewRow label="Coach" value={data.ipraktikum.coachName} />
+          <ReviewRow
+            label="Project Lead (PL)"
+            value={data.ipraktikum.projectLead}
+          />
         </ReviewSection>
       )}
 
@@ -136,6 +140,9 @@ export function ReviewStep() {
                 <Badge variant="outline">
                   {port.port}/{port.protocol.toUpperCase()}
                 </Badge>
+                {port.publicAccess && (
+                  <Badge variant="highlighted">public</Badge>
+                )}
                 <span className="text-muted-foreground">- {port.reason}</span>
               </div>
             ))}

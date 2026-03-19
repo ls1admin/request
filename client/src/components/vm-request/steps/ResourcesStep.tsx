@@ -41,13 +41,13 @@ export function ResourcesStep() {
               <FormControl>
                 <Input
                   type="number"
-                  min={1}
-                  max={32}
+                  min={2}
+                  max={8}
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
-              <FormDescription>1-32 cores available</FormDescription>
+              <FormDescription>2-8 cores available</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -62,13 +62,13 @@ export function ResourcesStep() {
               <FormControl>
                 <Input
                   type="number"
-                  min={1}
-                  max={64}
+                  min={2}
+                  max={8}
                   {...field}
                   onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
-              <FormDescription>1-64 GB available</FormDescription>
+              <FormDescription>2-8 GB available</FormDescription>
               <FormMessage />
             </FormItem>
           )}

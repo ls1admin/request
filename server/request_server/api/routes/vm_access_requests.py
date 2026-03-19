@@ -45,7 +45,7 @@ async def create_vm_access_request(
     ssh_key = request.ssh_key
     ssh_key_type = ssh_key.type
     ssh_key_value = None
-    ssh_public_key = None  # Track the actual public key for Jira ticket
+    ssh_public_key = None
 
     if isinstance(ssh_key, SSHKeyNew):
         # Parse and validate the SSH key

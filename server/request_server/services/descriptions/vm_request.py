@@ -109,6 +109,7 @@ class VMRequestDescriptionBuilder:
                     field("Project Type", "iPraktikum"),
                     field("Team Name", details.get("team_name", "N/A")),
                     field("Coach Name", details.get("coach_name", "N/A")),
+                    field("Project Lead (PL)", details.get("project_lead", "N/A")),
                 ]
             )
         if project_type == "thesis":
@@ -146,7 +147,14 @@ class VMRequestDescriptionBuilder:
                 port = port_info.get("port", "N/A")
                 protocol = port_info.get("protocol", "tcp")
                 reason = port_info.get("reason", "No reason provided")
-                lines.append(f"  - {port}/{protocol}: {reason}")
+                public = port_info.get("public_access", False)
+                entry = f"  - {port}/{protocol}: {reason}"
+                if public:
+                    justification = port_info.get(
+                        "public_justification", "No justification provided"
+                    )
+                    entry += f" **[PUBLIC]** - {justification}"
+                lines.append(entry)
         else:
             lines.append(field("Additional Ports", "None"))
 

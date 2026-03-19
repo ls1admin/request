@@ -1,6 +1,5 @@
 import type { APIRequestContext } from "@playwright/test";
-
-const SERVER_URL = "http://localhost:8009";
+import { SERVER_URL } from "../playwright.config";
 
 export interface DebugTicket {
   ticket_key: string;
