@@ -31,6 +31,7 @@ class RedmineTicketService(TicketService):
         self.base_url = settings.redmine_url.rstrip("/")
         self.project_id = settings.redmine_project
         self.group_id = settings.redmine_group_id
+        self.tracker_id = settings.redmine_tracker_id
 
     def _get_headers(self, switch_user: str | None = None) -> dict[str, str]:
         headers = {
@@ -144,13 +145,15 @@ class RedmineTicketService(TicketService):
             if user_ok:
                 switch_user = request.reporter_username
 
-        issue_data: dict[str, Any] = {
-            "issue": {
-                "project_id": self.project_id,
-                "subject": request.summary,
-                "description": request.description,
-            }
+        issue_payload: dict[str, Any] = {
+            "project_id": self.project_id,
+            "subject": request.summary,
+            "description": request.description,
         }
+        if self.tracker_id:
+            issue_payload["tracker_id"] = self.tracker_id
+
+        issue_data: dict[str, Any] = {"issue": issue_payload}
 
         async with httpx.AsyncClient() as client:
             try:
@@ -194,7 +197,34 @@ class RedmineTicketService(TicketService):
                 )
                 return False
 
+    async def _resolve_user_id(self, username: str) -> int | None:
+        """Look up a Redmine user ID by login name."""
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    f"{self.base_url}/users.json",
+                    params={"name": username},
+                    headers=self._get_headers(),
+                )
+                response.raise_for_status()
+                data = response.json()
+                for user in data.get("users", []):
+                    if user.get("login") == username:
+                        return user["id"]
+                logger.warning("Redmine user '%s' not found", username)
+                return None
+        except httpx.HTTPError as e:
+            logger.warning("Failed to resolve Redmine user '%s': %s", username, e)
+            return None
+
     async def set_custom_field(self, ticket_key: str, field_name: str, value: Any) -> bool:
+        # Jira passes {"name": "username"} for user fields — resolve to Redmine user ID
+        if isinstance(value, dict) and "name" in value:
+            user_id = await self._resolve_user_id(value["name"])
+            if user_id is None:
+                return False
+            value = user_id
+
         custom_fields = [{"id": int(field_name), "value": value}]
 
         async with httpx.AsyncClient() as client:

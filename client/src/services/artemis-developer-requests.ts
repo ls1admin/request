@@ -23,8 +23,8 @@ export interface ArtemisDeveloperRequestResponse {
   other_subteam: string | null;
   additional_comments: string | null;
   status: string;
-  jira_ticket_key: string | null;
-  jira_ticket_url: string | null;
+  ticket_key: string | null;
+  ticket_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -39,8 +39,8 @@ export interface ArtemisDeveloperRequestListItem {
   slack_email: string;
   subteams: string[];
   status: string;
-  jira_ticket_key: string | null;
-  jira_ticket_url: string | null;
+  ticket_key: string | null;
+  ticket_url: string | null;
   created_at: string;
 }
 

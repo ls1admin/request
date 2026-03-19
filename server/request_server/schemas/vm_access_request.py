@@ -68,7 +68,7 @@ class VMAccessRequestResponse(BaseModel):
     ssh_key_type: str
     status: AccessRequestStatus
     requester_username: str
-    jira_ticket_key: str | None
+    ticket_key: str | None = Field(validation_alias="jira_ticket_key")
     created_at: datetime
     updated_at: datetime
 
@@ -76,11 +76,9 @@ class VMAccessRequestResponse(BaseModel):
 
     @computed_field
     @property
-    def jira_ticket_url(self) -> str | None:
-        """Return the full URL to the Jira ticket."""
-        if self.jira_ticket_key and settings.jira_url:
-            return f"{settings.jira_url.rstrip('/')}/browse/{self.jira_ticket_key}"
-        return None
+    def ticket_url(self) -> str | None:
+        """Return the full URL to the ticket."""
+        return settings.ticket_url(self.ticket_key)
 
 
 class VMAccessRequestListResponse(BaseModel):
@@ -90,15 +88,13 @@ class VMAccessRequestListResponse(BaseModel):
     hostname: str
     status: AccessRequestStatus
     requester_username: str
-    jira_ticket_key: str | None
+    ticket_key: str | None = Field(validation_alias="jira_ticket_key")
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
     @computed_field
     @property
-    def jira_ticket_url(self) -> str | None:
-        """Return the full URL to the Jira ticket."""
-        if self.jira_ticket_key and settings.jira_url:
-            return f"{settings.jira_url.rstrip('/')}/browse/{self.jira_ticket_key}"
-        return None
+    def ticket_url(self) -> str | None:
+        """Return the full URL to the ticket."""
+        return settings.ticket_url(self.ticket_key)

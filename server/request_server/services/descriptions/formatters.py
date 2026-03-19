@@ -84,14 +84,22 @@ class JiraMarkupFormatter(MarkupFormatter):
                 i += 1
                 continue
 
-            # HTML img tag -> Jira image
-            img_match = re.match(
-                r'^<img\s+src="([^"]+)"\s+width="(\d+)"\s+height="(\d+)"\s*/?>$',
+            # HTML img tag -> Jira image with dimensions
+            img_html_match = re.match(
+                r'^<img\s+src="([^"]+)"(?:\s+alt="[^"]*")?(?:\s+width="(\d+)")?(?:\s+height="(\d+)")?\s*/?>$',
                 line.strip(),
             )
-            if img_match:
-                url, width, height = img_match.groups()
-                result.append(f"!{url}|width={width},height={height}!")
+            if img_html_match:
+                url = img_html_match.group(1)
+                w = img_html_match.group(2)
+                h = img_html_match.group(3)
+                params = []
+                if w:
+                    params.append(f"width={w}")
+                if h:
+                    params.append(f"height={h}")
+                suffix = "|" + ",".join(params) if params else ""
+                result.append(f"!{url}{suffix}!")
                 i += 1
                 continue
 

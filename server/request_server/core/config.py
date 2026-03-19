@@ -52,6 +52,7 @@ class Settings(BaseSettings):
     redmine_api_key: str = ""
     redmine_project: str = ""
     redmine_group_id: int = 0
+    redmine_tracker_id: int = 0
     redmine_username: str = ""
 
     # GitLab
@@ -77,6 +78,16 @@ class Settings(BaseSettings):
         if self.ticket_system == "noop":
             return False
         return False
+
+    def ticket_url(self, ticket_key: str | None) -> str | None:
+        """Build the web URL for a ticket based on the active ticket system."""
+        if not ticket_key:
+            return None
+        if self.ticket_system == "jira" and self.jira_url:
+            return f"{self.jira_url.rstrip('/')}/browse/{ticket_key}"
+        if self.ticket_system == "redmine" and self.redmine_url:
+            return f"{self.redmine_url.rstrip('/')}/issues/{ticket_key}"
+        return None
 
     @property
     def keycloak_issuer(self) -> str:

@@ -140,7 +140,11 @@ const addProjectFieldErrors = (
     projectType: ProjectType;
     ipraktikum?: { teamName?: string; coachName?: string };
     thesis?: { studyLevel?: string; title?: string; advisor?: string };
-    chairProject?: { projectName?: string; projectDescription?: string; responsiblePerson?: string };
+    chairProject?: {
+      projectName?: string;
+      projectDescription?: string;
+      responsiblePerson?: string;
+    };
   },
   ctx: z.RefinementCtx,
 ) => {

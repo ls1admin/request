@@ -221,11 +221,12 @@ async def handle_tum_guest_ticket_creation(
             settings.secondary_reporter_field,
             {"name": settings.service_account_name},
         )
-        await ticket_service.add_comment(
-            CommentRequest(
-                ticket_key=ticket_key,
-                body=builder.build_comment(guest_request, is_authenticated, requester_username),
+        if is_authenticated:
+            await ticket_service.add_comment(
+                CommentRequest(
+                    ticket_key=ticket_key,
+                    body=builder.build_comment(guest_request, is_authenticated, requester_username),
+                )
             )
-        )
 
-    return ticket_key
+    return ticket_key if is_authenticated else None

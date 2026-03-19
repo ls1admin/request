@@ -76,13 +76,19 @@ export function ReviewStep() {
 
       {data.projectType === "chair_project" && data.chairProject && (
         <ReviewSection title="Chair Project Details">
-          <ReviewRow label="Project Name" value={data.chairProject.projectName} />
+          <ReviewRow
+            label="Project Name"
+            value={data.chairProject.projectName}
+          />
           <div className="text-sm">
             <span className="text-muted-foreground">Description:</span>
             <p className="mt-1">{data.chairProject.projectDescription}</p>
           </div>
           {data.chairProject.responsiblePerson && (
-            <ReviewRow label="Responsible Person" value={data.chairProject.responsiblePerson} />
+            <ReviewRow
+              label="Responsible Person"
+              value={data.chairProject.responsiblePerson}
+            />
           )}
         </ReviewSection>
       )}

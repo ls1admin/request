@@ -10,8 +10,8 @@ export interface VMAccessRequestResponse {
   ssh_key_type: string;
   status: string;
   requester_username: string;
-  jira_ticket_key: string | null;
-  jira_ticket_url: string | null;
+  ticket_key: string | null;
+  ticket_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -21,8 +21,8 @@ export interface VMAccessRequestListItem {
   hostname: string;
   status: string;
   requester_username: string;
-  jira_ticket_key: string | null;
-  jira_ticket_url: string | null;
+  ticket_key: string | null;
+  ticket_url: string | null;
   created_at: string;
 }
 

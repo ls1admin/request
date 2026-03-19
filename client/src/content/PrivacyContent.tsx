@@ -42,8 +42,8 @@ export function PrivacyContent() {
         </li>
         <li>
           <strong>VM Request data:</strong> Hostname, project details (team
-          name, thesis title, project name, responsible person), SSH public keys, and usernames of
-          additional users.
+          name, thesis title, project name, responsible person), SSH public
+          keys, and usernames of additional users.
         </li>
         <li>
           <strong>VM Access Request data:</strong> Target hostname,
@@ -76,7 +76,6 @@ export function PrivacyContent() {
         </li>
         <li>
           Creating and managing support tickets in our issue tracking system
-          (Jira)
         </li>
         <li>Contacting you regarding the status of your requests</li>
         <li>Managing access to university systems and infrastructure</li>
@@ -109,7 +108,7 @@ export function PrivacyContent() {
       <ul className="list-disc list-inside space-y-2 mb-4">
         <li>AET staff members responsible for processing your request</li>
         <li>System administrators who provision the requested resources</li>
-        <li>Our issue tracking system (Jira) for request management</li>
+        <li>Our issue tracking system for request management</li>
       </ul>
 
       <h3 className="text-lg font-medium mb-2 mt-6">Logging</h3>

@@ -30,7 +30,7 @@ test.describe("TUM Guest Request - Anonymous (For Self)", () => {
     expect(ticket.description).toContain("Team Epsilon");
     expect(ticket.description).toContain("Dr. Schwarz");
     expect(ticket.reporter_username).toBeNull();
-    expect(ticket.comments.length).toBeGreaterThan(0);
+    expect(ticket.comments.length).toBe(0);
   });
 
   test("Artemis, female, French", async ({

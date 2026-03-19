@@ -58,7 +58,7 @@ export async function fetchSSHKeys(): Promise<APIResponse<StoredSSHKey[]>> {
  */
 export async function submitVMRequest(
   request: VMRequestSubmission,
-): Promise<APIResponse<{ requestId: string; jiraTicketUrl: string | null }>> {
+): Promise<APIResponse<{ requestId: string; ticketUrl: string | null }>> {
   try {
     // Extract just the VMRequest data (without user info which server gets from token)
     const { user: _user, ...vmRequestData } = request;
@@ -67,7 +67,7 @@ export async function submitVMRequest(
       success: true,
       data: {
         requestId: response.id,
-        jiraTicketUrl: response.jira_ticket_url,
+        ticketUrl: response.ticket_url,
       },
     };
   } catch (error) {
@@ -186,7 +186,7 @@ export type ArtemisRequestSubmission = ArtemisRequest & {
  */
 export async function submitArtemisRequest(
   request: ArtemisRequestSubmission,
-): Promise<APIResponse<{ requestId: string; jiraTicketUrl: string | null }>> {
+): Promise<APIResponse<{ requestId: string; ticketUrl: string | null }>> {
   try {
     // Extract the ArtemisRequest data and GitHub user info
     const { user: _user, githubUser, ...artemisRequestData } = request;
@@ -198,7 +198,7 @@ export async function submitArtemisRequest(
       success: true,
       data: {
         requestId: response.id,
-        jiraTicketUrl: response.jira_ticket_url,
+        ticketUrl: response.ticket_url,
       },
     };
   } catch (error) {
@@ -225,7 +225,7 @@ export type VMAccessRequestSubmission = VMAccessRequest & {
  */
 export async function submitVMAccessRequest(
   request: VMAccessRequestSubmission,
-): Promise<APIResponse<{ requestId: string; jiraTicketUrl: string | null }>> {
+): Promise<APIResponse<{ requestId: string; ticketUrl: string | null }>> {
   try {
     // Extract just the VMAccessRequest data (without user info which server gets from token)
     const { user: _user, ...vmAccessRequestData } = request;
@@ -234,7 +234,7 @@ export async function submitVMAccessRequest(
       success: true,
       data: {
         requestId: response.id,
-        jiraTicketUrl: response.jira_ticket_url,
+        ticketUrl: response.ticket_url,
       },
     };
   } catch (error) {
@@ -262,7 +262,7 @@ export type TUMGuestRequestSubmission = TUMGuestRequest & {
  */
 export async function submitTUMGuestRequest(
   request: TUMGuestRequestSubmission,
-): Promise<APIResponse<{ requestId: string; jiraTicketUrl: string | null }>> {
+): Promise<APIResponse<{ requestId: string; ticketUrl: string | null }>> {
   try {
     // Extract just the TUMGuestRequest data (without requester info which server gets from token if logged in)
     const { requester: _requester, ...tumGuestRequestData } = request;
@@ -271,7 +271,7 @@ export async function submitTUMGuestRequest(
       success: true,
       data: {
         requestId: response.id,
-        jiraTicketUrl: response.jira_ticket_url,
+        ticketUrl: response.ticket_url,
       },
     };
   } catch (error) {

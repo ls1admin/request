@@ -17,7 +17,7 @@ export const externalLinks: ExternalLink[] = [
   },
   {
     id: "thesis-track",
-    label: "Thesis Track",
+    label: "Thesis Management",
     url: "https://thesis.aet.cit.tum.de",
     description: "Thesis application and management tool",
     enabled: true,
@@ -38,8 +38,8 @@ export const externalLinks: ExternalLink[] = [
   },
   {
     id: "support",
-    label: "Open Jira Ticket",
-    url: "https://jira.aet.cit.tum.de/secure/CreateIssue!default.jspa",
+    label: "Open Support Ticket",
+    url: "https://redmine.aet.cit.tum.de",
     description: "Technical support and issue reporting",
     enabled: true,
   },

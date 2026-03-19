@@ -18,8 +18,8 @@ export interface TUMGuestRequestResponse {
   additional_comments: string | null;
   status: string;
   requester_username: string | null;
-  jira_ticket_key: string | null;
-  jira_ticket_url: string | null;
+  ticket_key: string | null;
+  ticket_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -32,8 +32,8 @@ export interface TUMGuestRequestListItem {
   guest_type: string;
   status: string;
   requester_username: string | null;
-  jira_ticket_key: string | null;
-  jira_ticket_url: string | null;
+  ticket_key: string | null;
+  ticket_url: string | null;
   created_at: string;
 }
 

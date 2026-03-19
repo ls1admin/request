@@ -11,7 +11,7 @@ import {
 
 interface RequestSuccessCardProps {
   requestId: string;
-  jiraTicketUrl?: string | null;
+  ticketUrl?: string | null;
   description: string;
   onBack: () => void;
   children?: ReactNode;
@@ -19,7 +19,7 @@ interface RequestSuccessCardProps {
 
 export function RequestSuccessCard({
   requestId,
-  jiraTicketUrl,
+  ticketUrl,
   description,
   onBack,
   children,
@@ -45,14 +45,10 @@ export function RequestSuccessCard({
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Home
             </Button>
-            {jiraTicketUrl && (
+            {ticketUrl && (
               <Button asChild>
-                <a
-                  href={jiraTicketUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Jira Ticket
+                <a href={ticketUrl} target="_blank" rel="noopener noreferrer">
+                  View Ticket
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>

@@ -13,7 +13,7 @@ import type { TUMGuestRequest } from "@/types/tum-guest-request";
 interface SubmitResultSuccess {
   success: true;
   requestId: string;
-  jiraTicketUrl: string | null;
+  ticketUrl: string | null;
   wasAuthenticated: boolean;
   requestingForSelf: boolean;
   guestEmail: string;
@@ -52,7 +52,7 @@ export function TUMGuestRequestPage() {
         setSubmitResult({
           success: true,
           requestId: response.data.requestId,
-          jiraTicketUrl: response.data.jiraTicketUrl,
+          ticketUrl: response.data.ticketUrl,
           wasAuthenticated: isAuthenticated,
           requestingForSelf: !data.isLoggedIn && data.requestingForSelf,
           guestEmail: data.email,
@@ -78,14 +78,14 @@ export function TUMGuestRequestPage() {
       wasAuthenticated,
       requestingForSelf,
       guestEmail,
-      jiraTicketUrl,
+      ticketUrl,
       requestId,
     } = submitResult;
 
     return (
       <RequestSuccessCard
         requestId={requestId}
-        jiraTicketUrl={jiraTicketUrl}
+        ticketUrl={ticketUrl}
         description="Your TUM guest account request has been submitted successfully."
         onBack={() => navigate("/")}
       >

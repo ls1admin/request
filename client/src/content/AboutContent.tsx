@@ -34,7 +34,7 @@ export function AboutContent() {
 
       <p className="mb-4">
         For questions or support, please contact the AET team or open a support
-        ticket through the Jira link on the homepage.
+        ticket through the support link on the homepage.
       </p>
     </>
   );

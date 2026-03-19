@@ -26,8 +26,7 @@ test.describe("Artemis Developer Request - Anonymous", () => {
     expect(ticket.description).toContain("Apollon");
     expect(ticket.description).toContain("CSV Import Line");
     expect(ticket.reporter_username).toBeNull();
-    expect(ticket.comments.length).toBeGreaterThan(0);
-    expect(ticket.comments[0]).toContain("External Developer");
+    expect(ticket.comments.length).toBe(0);
   });
 
   test("anonymous - multiple subteams with comment", async ({

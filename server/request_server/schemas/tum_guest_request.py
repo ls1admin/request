@@ -166,8 +166,8 @@ class TUMGuestRequestResponse(BaseModel):
     # Requester info (if authenticated)
     requester_username: str | None
 
-    # Jira
-    jira_ticket_key: str | None
+    # Ticket
+    ticket_key: str | None = Field(validation_alias="jira_ticket_key")
 
     created_at: datetime
     updated_at: datetime
@@ -176,11 +176,9 @@ class TUMGuestRequestResponse(BaseModel):
 
     @computed_field
     @property
-    def jira_ticket_url(self) -> str | None:
-        """Return the full URL to the Jira ticket."""
-        if self.jira_ticket_key and settings.jira_url:
-            return f"{settings.jira_url.rstrip('/')}/browse/{self.jira_ticket_key}"
-        return None
+    def ticket_url(self) -> str | None:
+        """Return the full URL to the ticket."""
+        return settings.ticket_url(self.ticket_key)
 
 
 class TUMGuestRequestListResponse(BaseModel):
@@ -193,15 +191,13 @@ class TUMGuestRequestListResponse(BaseModel):
     guest_type: GuestType
     status: GuestRequestStatus
     requester_username: str | None
-    jira_ticket_key: str | None
+    ticket_key: str | None = Field(validation_alias="jira_ticket_key")
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
     @computed_field
     @property
-    def jira_ticket_url(self) -> str | None:
-        """Return the full URL to the Jira ticket."""
-        if self.jira_ticket_key and settings.jira_url:
-            return f"{settings.jira_url.rstrip('/')}/browse/{self.jira_ticket_key}"
-        return None
+    def ticket_url(self) -> str | None:
+        """Return the full URL to the ticket."""
+        return settings.ticket_url(self.ticket_key)

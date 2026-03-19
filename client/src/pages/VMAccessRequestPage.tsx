@@ -16,7 +16,7 @@ export function VMAccessRequestPage() {
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     requestId?: string;
-    jiraTicketUrl?: string | null;
+    ticketUrl?: string | null;
     error?: string;
   } | null>(null);
 
@@ -39,7 +39,7 @@ export function VMAccessRequestPage() {
         setSubmitResult({
           success: true,
           requestId: response.data.requestId,
-          jiraTicketUrl: response.data.jiraTicketUrl,
+          ticketUrl: response.data.ticketUrl,
         });
       } else {
         setSubmitResult({
@@ -61,7 +61,7 @@ export function VMAccessRequestPage() {
     return (
       <RequestSuccessCard
         requestId={submitResult.requestId ?? ""}
-        jiraTicketUrl={submitResult.jiraTicketUrl}
+        ticketUrl={submitResult.ticketUrl}
         description="Your VM access request has been submitted successfully."
         onBack={() => navigate("/")}
       >

@@ -80,7 +80,8 @@ class ArtemisDevDescriptionBuilder:
         )
 
         if artemis_request.github_avatar_url:
-            sections.append(image(artemis_request.github_avatar_url, width=64, height=64))
+            sections.append(image(artemis_request.github_avatar_url, alt="GitHub Avatar", width=64))
+            sections.append("")
 
         profile_url = (
             artemis_request.github_profile_url
@@ -97,7 +98,7 @@ class ArtemisDevDescriptionBuilder:
             sections.append(field("GitHub Display Name", artemis_request.github_name))
 
         sections.append(
-            field("Profile Verified", "(/) Yes - GitHub profile exists and was verified")
+            field("Profile Verified", "Yes - GitHub profile exists and was verified")
         )
 
         # Artemis details
@@ -261,11 +262,12 @@ async def handle_artemis_ticket_creation(
             settings.secondary_reporter_field,
             {"name": settings.service_account_name},
         )
-        await ticket_service.add_comment(
-            CommentRequest(
-                ticket_key=ticket_key,
-                body=builder.build_comment(artemis_request, is_authenticated, requester_username),
+        if is_authenticated:
+            await ticket_service.add_comment(
+                CommentRequest(
+                    ticket_key=ticket_key,
+                    body=builder.build_comment(artemis_request, is_authenticated, requester_username),
+                )
             )
-        )
 
-    return ticket_key
+    return ticket_key if is_authenticated else None
