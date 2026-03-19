@@ -45,12 +45,12 @@ export function RequestFormsSection() {
   const { isAuthenticated, login } = useAuth();
 
   return (
-    <section className="py-2 2xl:py-6">
+    <section className="py-6 md:py-8">
       <div className="container mx-auto px-4">
-        <h2 className="mb-2 2xl:mb-4 text-base 2xl:text-lg font-medium text-muted-foreground">
+        <h2 className="mb-4 text-lg font-medium text-muted-foreground">
           Request Forms
         </h2>
-        <div className="grid gap-3 2xl:gap-4 grid-cols-2">
+        <div className="grid gap-4 grid-cols-2">
           {requestForms.map((form) => (
             <RequestCard
               key={form.id}
