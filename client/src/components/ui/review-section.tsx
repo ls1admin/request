@@ -21,9 +21,9 @@ interface ReviewRowProps {
 
 export function ReviewRow({ label, value }: ReviewRowProps) {
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="flex flex-col gap-0.5 sm:grid sm:grid-cols-[auto_1fr] sm:gap-2">
       <span className="text-muted-foreground">{label}:</span>
-      <span>{value}</span>
+      <span className="break-all">{value}</span>
     </div>
   );
 }

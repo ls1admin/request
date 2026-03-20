@@ -51,13 +51,13 @@ export function GuestTypeStep() {
                 {guestTypes.map((type) => (
                   <FormItem
                     key={type}
-                    className="flex items-center space-x-3 space-y-0 rounded-md border p-4"
+                    className="flex items-start space-x-3 space-y-0 rounded-md border p-4 sm:items-center"
                   >
                     <FormControl>
                       <RadioGroupItem value={type} />
                     </FormControl>
-                    <FormLabel className="flex-1 cursor-pointer font-normal">
-                      <span className="font-medium">
+                    <FormLabel className="flex flex-1 cursor-pointer flex-col text-left font-normal sm:flex-row sm:items-center sm:gap-2">
+                      <span className="font-medium self-start">
                         {GUEST_TYPE_LABELS[type]}
                       </span>
                       <p className="text-sm text-muted-foreground">

@@ -121,20 +121,20 @@ export function SSHKeySection({ fieldPrefix = "sshKey" }: SSHKeySectionProps) {
                       {storedKeys.map((key) => (
                         <div
                           key={key.id}
-                          className="flex items-center space-x-3 rounded-lg border p-4"
+                          className="flex items-center space-x-3 overflow-hidden rounded-lg border p-4"
                         >
-                          <RadioGroupItem value={key.id} id={key.id} />
+                          <RadioGroupItem value={key.id} id={key.id} className="shrink-0" />
                           <Label
                             htmlFor={key.id}
-                            className="flex flex-1 cursor-pointer items-center justify-between"
+                            className="flex min-w-0 flex-1 cursor-pointer items-center justify-between gap-2"
                           >
-                            <div>
+                            <div className="min-w-0">
                               <p className="font-medium">{key.name}</p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="hidden truncate text-sm text-muted-foreground sm:block">
                                 {key.fingerprint}
                               </p>
                             </div>
-                            <Badge variant="secondary">
+                            <Badge variant="secondary" className="shrink-0">
                               {key.type.toUpperCase()}
                             </Badge>
                           </Label>

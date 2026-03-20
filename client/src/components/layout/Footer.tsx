@@ -11,9 +11,9 @@ const footerLinks = [
 export function Footer() {
   return (
     <footer className="mt-auto border-t bg-muted/30">
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-          <nav className="flex items-center gap-4">
+      <div className="container mx-auto p-4">
+        <div className="flex flex-col items-center gap-2 sm:gap-4 sm:flex-row sm:justify-between">
+          <nav className="flex items-center md:gap-4">
             {footerLinks.map((link, index) => (
               <div key={link.to} className="flex items-center gap-4">
                 <Link

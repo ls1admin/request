@@ -6,6 +6,7 @@ import { RequestFormsSection } from "@/components/start-page/RequestFormsSection
 import { SupportSection } from "@/components/start-page/SupportSection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/hooks/useAuth";
 import { useExternalLinks } from "@/hooks/useExternalLinks";
 
@@ -30,8 +31,9 @@ export function StartPage() {
   if (isLoading || !isLoaded) {
     return (
       <PageLayout>
-        <div className="flex min-h-[80vh] items-center justify-center">
-          <div className="text-muted-foreground">Loading...</div>
+        <div className="flex min-h-[80vh] flex-col items-center justify-center gap-3">
+          <Spinner className="size-8 text-primary" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
         </div>
       </PageLayout>
     );

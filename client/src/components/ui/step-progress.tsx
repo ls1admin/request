@@ -15,14 +15,20 @@ interface StepProgressProps {
 export function StepProgress({ steps, currentStep }: StepProgressProps) {
   return (
     <nav aria-label="Progress" className="w-full">
-      <ol className="flex items-start justify-center">
+      <ol className="flex w-full items-start">
         {steps.map((step, index) => (
-          <li key={step.id} className="flex items-start">
+          <li
+            key={step.id}
+            className={cn(
+              "flex items-start",
+              index !== steps.length - 1 ? "flex-1" : "",
+            )}
+          >
             {/* Step with circle and label */}
             <div className="flex flex-col items-center">
               <div
                 className={cn(
-                  "relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-sm font-medium",
+                  "relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-medium sm:h-8 sm:w-8 sm:text-sm",
                   step.id < currentStep &&
                     "border-primary bg-primary text-primary-foreground",
                   step.id === currentStep &&
@@ -32,7 +38,7 @@ export function StepProgress({ steps, currentStep }: StepProgressProps) {
                 )}
               >
                 {step.id < currentStep ? (
-                  <Check className="h-4 w-4" />
+                  <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 ) : (
                   step.id
                 )}
@@ -55,7 +61,7 @@ export function StepProgress({ steps, currentStep }: StepProgressProps) {
             {index !== steps.length - 1 && (
               <div
                 className={cn(
-                  "mt-4 h-0.5 w-16 sm:w-24",
+                  "mt-3.5 h-0.5 flex-1 sm:mt-4",
                   step.id < currentStep ? "bg-primary" : "bg-muted",
                 )}
               />

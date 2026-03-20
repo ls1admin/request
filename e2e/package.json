@@ -5,7 +5,9 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
-    "test:debug": "playwright test --debug"
+    "test:debug": "playwright test --debug",
+    "test:mobile": "playwright test --project=mobile --ui",
+    "test:desktop": "playwright test --project=chromium --ui"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0"

@@ -238,16 +238,16 @@ export function ExternalLinksAdmin({
         <Separator />
 
         {/* Actions */}
-        <div className="flex justify-between">
-          <Button variant="outline" onClick={onReset}>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
+          <Button variant="outline" onClick={onReset} className="w-full sm:w-auto">
             <RotateCcw className="mr-2 h-4 w-4" />
             Reset to Defaults
           </Button>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-initial">
               Cancel
             </Button>
-            <Button onClick={handleSave}>
+            <Button onClick={handleSave} className="flex-1 sm:flex-initial">
               <Save className="mr-2 h-4 w-4" />
               Save Changes
             </Button>
