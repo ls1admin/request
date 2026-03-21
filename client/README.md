@@ -1,73 +1,65 @@
-# React + TypeScript + Vite
+# AET Request Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for the AET Request system.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React 19, Vite, TypeScript, Tailwind CSS, shadcn/ui (New York style), Biome
 
-## React Compiler
+## Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env    # configure Keycloak + API URL
+npm install
+npm run dev             # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command | Description |
+|--------- | ------------- |
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Lint and format with Biome |
+| `npm run typecheck` | TypeScript type checking |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
 ```
+src/
+├── components/          # UI components organized by feature
+│   ├── admin/           # External links admin (drag-and-drop via @dnd-kit)
+│   ├── artemis-request/ # Artemis developer request form
+│   ├── layout/          # Header, Footer, PageLayout, ProtectedRoute
+│   ├── providers/       # AuthProvider (Keycloak OIDC)
+│   ├── shared/          # Shared form components
+│   ├── start-page/      # Landing page sections
+│   ├── support-request/ # Support request form
+│   ├── tum-guest-request/
+│   ├── ui/              # shadcn/ui components
+│   ├── vm-access-request/
+│   └── vm-request/
+├── config/              # App configuration
+├── content/             # Static content (About, Imprint, Privacy)
+├── hooks/               # useAuth, useExternalLinks, useExternalLinksAdmin
+├── lib/                 # Utilities, validation
+├── pages/               # Page components
+├── services/            # API client services
+└── types/               # Zod schemas and TypeScript types
+```
+
+## Adding UI Components
+
+Use shadcn/ui components before building custom ones:
+
+```bash
+npx shadcn@latest add [component-name]
+```
+
+### Key Custom Components
+
+- `ui/step-progress.tsx` — Multi-step form progress indicator with responsive design
+- `ui/step-header.tsx` — Step header with title and description
+
+Multi-step forms (VM Request, Artemis, TUM Guest) each define their own steps array and use `StepProgress` for navigation.

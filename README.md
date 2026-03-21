@@ -7,6 +7,7 @@ A web application for requesting university chair resources. Provides structured
 ```
 client/          React 19 + Vite + TypeScript + shadcn/ui
 server/          FastAPI + SQLAlchemy + Alembic
+e2e/             Playwright E2E Test Setup
 deploy/
   client/        Dockerfile (nginx)
   server/        Dockerfile (uvicorn)
@@ -28,7 +29,7 @@ deploy/
 cd client
 cp .env.example .env        # configure Keycloak + API URL
 npm install
-npm run dev                  # http://localhost:5173
+npm run dev                  # http://localhost:5174
 ```
 
 ### Server
@@ -38,7 +39,7 @@ cd server
 cp .env.example .env         # configure database + Keycloak
 uv sync
 uv run alembic upgrade head  # run migrations
-uv run uvicorn request_server.main:app --reload
+uv run uvicorn request_server.main:app --reload  # http://localhost:8000 
 ```
 
 ### Database
@@ -52,11 +53,13 @@ uv run alembic upgrade head
 ## Request Forms
 
 | Form | Route | Auth Required | Description |
-|------|-------|---------------|-------------|
+| ------ | ------- | --------------- | ------------- |
 | VM Request | `/request/vm` | Yes | Provision a new virtual machine |
 | VM Access | `/request/vm-access` | Yes | Request access to an existing VM |
 | Artemis Developer | `/request/artemis` | No | Artemis developer account setup |
 | TUM Guest Account | `/request/tum-guest` | No | Guest account for external users |
+| Support Request | `/request/support` | No | General support request |
+| External Links Admin | `/admin/external-links` | Admin | Manage external link sections |
 
 ## Deployment
 
@@ -92,6 +95,24 @@ Images are built and pushed to GHCR via GitHub Actions:
 ```
 ghcr.io/<owner>/request-client:<version>
 ghcr.io/<owner>/request-server:<version>
+```
+
+## E2E Tests
+
+End-to-end tests use Playwright and run against a test database (PostgreSQL on port 5433).
+
+```bash
+cd e2e
+npx playwright install       # first time only
+npx playwright test          # run all tests
+```
+
+Tests auto-start the client (port 5715) and server (port 8001) with `AUTH_BYPASS=true` and `TICKET_SYSTEM=debug`. Additional scripts:
+
+```bash
+npx playwright test --headed   # watch in browser
+npx playwright test --ui       # interactive UI mode
+npx playwright test --debug    # step-through debugger
 ```
 
 ## Development

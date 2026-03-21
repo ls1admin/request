@@ -1,480 +1,232 @@
-# University Resource Request System
+# AET Request
 
-## Project Overview
-
-A modern, user-friendly web application for requesting resources at a university chair. The system provides well-structured, validated forms to collect all necessary information from users efficiently. Call the System **AET Request**.
+A web application for requesting university chair resources. Provides structured, validated forms for VM provisioning, access requests, Artemis developer accounts, TUM guest accounts, and support requests.
 
 ## Tech Stack
 
 ### Frontend
 
-- **Framework**: React 19.2.0
-- **Build Tool**: Vite 7.2.4
-- **Language**: TypeScript 5.9.3
-- **Styling**: Tailwind CSS 4.1.18
-- **UI Components**: shadcn/ui (New York style)
-- **Icons**: Lucide React
-- **Code Quality**: Biome 2.3.8
+- **Framework**: React 19, Vite, TypeScript
+- **Styling**: Tailwind CSS, shadcn/ui (New York style), Lucide React icons
+- **Forms**: React Hook Form + Zod validation
+- **Routing**: React Router v7
+- **Auth**: OIDC Client TS (Keycloak)
+- **Code Quality**: Biome
 
-### Project Structure
+### Backend
 
-```
+- **Framework**: FastAPI, Pydantic, Pydantic Settings
+- **Database**: PostgreSQL, SQLAlchemy (async), Alembic migrations, asyncpg
+- **Auth**: Keycloak OIDC, role-based access control
+- **Ticket Systems**: Jira, Redmine, Debug, NoOp (configurable via `TICKET_SYSTEM`)
+- **Code Quality**: Ruff (lint + format), ty (type checking)
+
+## Project Structure
+
+```text
 request-v2/
-└── client/
-    ├── src/
-    │   ├── components/      # React components
-    │   │   └── ui/          # shadcn/ui components
-    │   ├── lib/             # Utility functions
-    │   ├── hooks/           # Custom React hooks
-    │   ├── assets/          # Static assets
-    │   ├── App.tsx          # Main app component
-    │   ├── main.tsx         # Application entry point
-    │   └── index.css        # Global styles and Tailwind directives
-    ├── public/              # Static public assets
-    ├── biome.json           # Biome configuration
-    ├── components.json      # shadcn/ui configuration
-    ├── tsconfig.json        # TypeScript configuration
-    └── vite.config.ts       # Vite configuration
+├── client/                      # React frontend
+│   └── src/
+│       ├── components/          # UI components by feature
+│       │   ├── admin/           # External links admin (drag-and-drop)
+│       │   ├── artemis-request/ # Multi-step form + steps/
+│       │   ├── layout/          # Header, Footer, PageLayout, ProtectedRoute
+│       │   ├── providers/       # AuthProvider
+│       │   ├── shared/          # Shared form components
+│       │   ├── start-page/      # Landing page sections
+│       │   ├── support-request/ # Single-page form
+│       │   ├── tum-guest-request/ # Multi-step form + steps/
+│       │   ├── ui/              # shadcn/ui components
+│       │   ├── vm-access-request/ # Single-page form
+│       │   └── vm-request/      # Multi-step form + steps/
+│       ├── config/              # App configuration
+│       ├── content/             # Static content (About, Imprint, Privacy)
+│       ├── hooks/               # useAuth, useExternalLinks, useExternalLinksAdmin
+│       ├── lib/                 # Utilities, validation
+│       ├── pages/               # Page components
+│       ├── services/            # API client services
+│       └── types/               # Zod schemas and TypeScript types
+├── server/                      # FastAPI backend
+│   └── request_server/
+│       ├── api/routes/          # Route handlers
+│       ├── core/                # Config, security
+│       ├── db/                  # Session, base model
+│       ├── models/              # SQLAlchemy ORM models
+│       ├── schemas/             # Pydantic request/response schemas
+│       └── services/
+│           ├── descriptions/    # Ticket description builders
+│           └── ticket/          # Ticket system implementations
+├── e2e/                         # Playwright end-to-end tests
+│   ├── tests/                   # Test specs (9 files)
+│   ├── fixtures/                # Auth fixtures, test data
+│   └── helpers/                 # Form fillers, debug API
+└── deploy/
+    ├── client/                  # Client Dockerfile (nginx)
+    ├── server/                  # Server Dockerfile (uvicorn)
+    └── helm/                    # Kubernetes Helm chart
 ```
 
-## Development Setup
+## Development Commands
 
-### Prerequisites
-
-- Node.js (compatible with React 19)
-- npm or pnpm
-
-### Installation
+### Client
 
 ```bash
 cd client
 npm install
+npm run dev          # dev server on :5173
+npm run build        # production build
+npm run lint         # Biome lint + format
+npm run typecheck    # TypeScript check
 ```
 
-### Development Commands
+### Server
 
 ```bash
-# Start development server
-npm run dev
+cd server
+uv sync
+uv run alembic upgrade head
+uv run uvicorn request_server.main:app --reload
 
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Lint and format code
-npm run lint
+# Quality
+uv run ruff check .          # lint
+uv run ruff check . --fix    # lint with auto-fix
+uv run ruff format .         # format
+uv run ty check .            # type check
+uv run pytest                # tests
 ```
 
-## Code Standards
+### E2E Tests
 
-### Biome Configuration
+```bash
+cd e2e
+npx playwright install    # first time only
+npx playwright test       # run all (auto-starts client + server)
+npx playwright test --ui  # interactive UI mode
+```
 
-- **Formatter**: Enabled with 2-space indentation
-- **Linter**: Enabled with recommended rules
-- **Quote Style**: Double quotes
-- **Auto Import Organization**: Enabled
-- **Tailwind Directives**: CSS parser support enabled
+Tests use PostgreSQL on port 5433, `AUTH_BYPASS=true`, and `TICKET_SYSTEM=debug`.
 
-### TypeScript
+See [TESTING.md](TESTING.md) for detailed instructions on writing e2e tests, patterns, and best practices.
 
-- Strict mode enabled
-- Path aliases configured:
-  - `@/components` → `src/components`
-  - `@/lib` → `src/lib`
-  - `@/hooks` → `src/hooks`
-  - `@/ui` → `src/components/ui`
+## Forms Reference
 
-### UI Component Guidelines
+| Form | Route | Auth | Type |
+| ---- | ----- | ---- | ---- |
+| VM Request | `/request/vm` | Required | Multi-step (6 steps) |
+| VM Access | `/request/vm-access` | Required | Single-page |
+| Artemis Developer | `/request/artemis` | Optional | Multi-step |
+| TUM Guest Account | `/request/tum-guest` | Optional | Multi-step |
+| Support Request | `/request/support` | Optional | Single-page |
+| External Links Admin | `/admin/external-links` | Admin | Admin dashboard |
 
-#### shadcn/ui Configuration
+## UI Component Guidelines
 
-- **Style**: New York
-- **Base Color**: Slate
-- **CSS Variables**: Enabled
-- **Icon Library**: Lucide React
-- **Framework**: React (non-RSC)
+Make sure to always try to reuse existing components. Never use recreate similar components. Check regularly if you can merge similar components.
 
-#### Component Installation
+### shadcn/ui
+
+Always check if a shadcn component exists before creating custom ones (you can should the shadcn MCP server if available):
 
 ```bash
 npx shadcn@latest add [component-name]
 ```
 
-#### Always Use shadcn Components
+- Forms: Form, Field, Input, Textarea, Select, Checkbox, Radio, Switch
+- Layout: Card, Separator, Tabs, Accordion, Sheet, Dialog
+- Feedback: Alert, Toast, Badge, Progress, Skeleton
+- Navigation: Button, Dropdown Menu, Breadcrumb
 
-When building UI, always check if a shadcn component exists before creating custom components:
-- Forms: Use Form (with React Hook Form and Zod), Field, Input, Input Group, Label, Textarea, Select, Checkbox, Radio, Switch, etc.
-- Layout: Use Card, Separator, Tabs, Accordion, Sheet, Dialog, Item, Container, etc.
-- Feedback: Use Alert, Toast, Badge, Progress, Skeleton, etc.
-- Navigation: Use Button, Navigation Menu, Breadcrumb, Dropdown Menu, Button Group, etc.
-- Data Display: Use Table, Avatar, Calendar, Command, Empty, Spinner, etc.
+### Key Custom Components
 
-### Styling Guidelines
+- `ui/step-progress.tsx` — Responsive multi-step progress indicator (circles, check marks, connector lines)
+- `ui/step-header.tsx` — Step title and description header
+
+Each multi-step form defines its own steps array and wraps `StepProgress`.
+
+### Styling
 
 - Use Tailwind CSS utility classes
-- Follow mobile-first responsive design
-- Maintain consistent spacing and typography
-- Use CSS variables for theme colors (defined in index.css)
-- Leverage Tailwind's design system for consistency
-
-## Project Goals
-
-### Core Principles
-
-1. **User Experience**: Clean, intuitive interface that guides users through the request process
-2. **Accessibility**: WCAG compliant, keyboard navigable, screen reader friendly
-3. **Validation**: Comprehensive client-side validation with clear error messages
-4. **Maintainability**: Well-structured, documented code following React best practices
-5. **Performance**: Fast load times, optimized bundle size, efficient rendering
-
-### Features to Implement
-
-- Multi-step resource request forms
-- Form validation with helpful error messages
-- Dynamic form fields based on request type
-- Request status tracking
-- Responsive design for all devices
-- Form data persistence (local storage)
-- File upload capabilities
-- Confirmation and success screens
-
-## Form Design Principles
-
-### Validation Strategy
-
-- Real-time validation feedback (on blur)
-- Clear, actionable error messages
-- Visual indicators for required fields
-- Inline validation for complex fields
-- Summary of errors before submission
-
-### User Experience
-
-- Progressive disclosure (show relevant fields based on selections)
-- Auto-save drafts
-- Clear progress indicators for multi-step forms
-- Confirmation before submission
-- Success feedback with next steps
-
-## Best Practices
-
-### Component Architecture
-
-- Keep components small and focused
-- Use composition over inheritance
-- Implement proper prop typing with TypeScript
-- Separate business logic from presentation
-- Use custom hooks for shared logic
-
-### State Management
-
-- Keep state as local as possible
-- Use React hooks (useState, useReducer) for local state
-- Consider context API for global state if needed
-- Avoid prop drilling with proper component composition
-
-### Performance
-
-- Lazy load routes and heavy components
-- Optimize images and assets
-- Use React.memo for expensive components
-- Implement proper loading states
-- Minimize re-renders
-- Avoid unnecessary use of useEffect (You Might Not Need an Effect)
-
-### Code Organization
-
-- One component per file
-- Group related components in folders
-- Keep utility functions in lib/
-- Use custom hooks for reusable logic
-- Follow consistent naming conventions
-
-## Dependencies
-
-### Core Dependencies
-
-- react, react-dom: UI framework
-- @tailwindcss/vite: Styling integration
-- lucide-react: Icon library
-- clsx, tailwind-merge: Utility classes
-- class-variance-authority: Component variants
-
-### Development Dependencies
-
-- @biomejs/biome: Linting and formatting
-- @vitejs/plugin-react: React support for Vite
-- TypeScript and type definitions
-- tw-animate-css: Animation utilities
+- Mobile-first responsive design
+- CSS variables for theme colors (defined in `index.css`)
 
 ## Form Implementation Patterns
 
-This project uses consistent patterns for implementing request forms. Follow these patterns when creating new forms.
-
-### File Structure for Forms
+### File Structure
 
 ```text
 src/
-├── types/
-│   └── {form-name}-request.ts      # Zod schemas and TypeScript types
-├── components/
-│   └── {form-name}-request/
-│       ├── {FormName}RequestForm.tsx    # Main form component
-│       ├── StepProgress.tsx             # Step indicator (multi-step only)
-│       └── steps/                       # Step components (multi-step only)
-│           ├── Step1.tsx
-│           ├── Step2.tsx
-│           └── ReviewStep.tsx
-├── pages/
-│   └── {FormName}RequestPage.tsx   # Page wrapper with submit handling
-└── lib/
-    └── api.ts                      # API submission functions
+├── types/{form-name}-request.ts         # Zod schemas + TypeScript types
+├── components/{form-name}-request/
+│   ├── {FormName}RequestForm.tsx         # Main form component
+│   ├── StepProgress.tsx                  # Step config (multi-step only)
+│   └── steps/                           # Step components (multi-step only)
+├── pages/{FormName}RequestPage.tsx       # Page wrapper with submit handling
+└── services/{form-name}-requests.ts     # API client
 ```
 
-### Types and Validation (Zod)
+### Validation (Zod)
 
-Create schemas in `src/types/{form-name}-request.ts`:
+- Use `z.discriminatedUnion("isLoggedIn", [...])` for auth-aware forms
+- Use `superRefine` for cross-field validation
+- Export schema, inferred type, and default values from type files
+
+### Multi-Step Forms
 
 ```typescript
-import { z } from "zod";
-
-// Define field schemas
-const fieldSchema = z.string().min(1, "Field is required");
-
-// For forms with different flows (logged in vs anonymous):
-const loggedInSchema = z.object({
-  isLoggedIn: z.literal(true),
-  // ... fields for logged-in users
+const form = useForm<FormRequest>({
+  resolver: zodResolver(formSchema),
+  defaultValues: getDefaultValues(isAuthenticated),
+  mode: "onChange",
 });
-
-const anonymousSchema = z.object({
-  isLoggedIn: z.literal(false),
-  // ... additional fields for anonymous users
-});
-
-// Use discriminatedUnion for conditional schemas
-export const formSchema = z.discriminatedUnion("isLoggedIn", [
-  loggedInSchema,
-  anonymousSchema,
-]);
-
-// Use superRefine for cross-field validation
-export const formSchemaWithCrossValidation = formSchema.superRefine((data, ctx) => {
-  if (data.someField === "other" && !data.otherField?.trim()) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Please specify details",
-      path: ["otherField"],
-    });
-  }
-});
-
-// Export type and default values
-export type FormRequest = z.infer<typeof formSchema>;
-export const getDefaultValues = (isLoggedIn: boolean): Partial<FormRequest> => ({...});
 ```
 
-### Multi-Step Form Pattern
+Validate per-step before advancing. Each step component receives the form via `useFormContext`.
 
-Used for complex forms (VM Request, Artemis Request, TUM Guest Request):
+### Single-Page Forms
 
-```typescript
-// Form component structure
-export function RequestForm({ onSubmit, isSubmitting }: Props) {
-  const { isAuthenticated } = useAuth();
-  const [currentStep, setCurrentStep] = useState(1);
+Same pattern without step navigation. Single `Card` with all fields.
 
-  const steps = isAuthenticated ? STEPS_LOGGED_IN : STEPS_ANONYMOUS;
+### Page Wrapper
 
-  const form = useForm<FormRequest>({
-    resolver: zodResolver(formSchema),
-    defaultValues: getDefaultValues(isAuthenticated),
-    mode: "onChange",
-  });
-
-  const validateCurrentStep = async (): Promise<boolean> => {
-    // Validate only fields relevant to current step
-    const result = stepSchema.safeParse(form.getValues());
-    if (!result.success) {
-      // Set errors on form
-      return false;
-    }
-    return true;
-  };
-
-  return (
-    <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <StepProgress steps={steps} currentStep={currentStep} />
-        {renderCurrentStep()}
-        <NavigationButtons />
-      </form>
-    </FormProvider>
-  );
-}
-```
-
-### Single-Page Form Pattern
-
-Used for simple forms (VM Access Request):
-
-```typescript
-export function SimpleRequestForm({ onSubmit, isSubmitting }: Props) {
-  const form = useForm<FormRequest>({
-    resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
-    mode: "onChange",
-  });
-
-  return (
-    <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader><CardTitle>Form Title</CardTitle></CardHeader>
-          <CardContent>
-            <FormField ... />
-          </CardContent>
-        </Card>
-        <Button type="submit" disabled={isSubmitting}>Submit</Button>
-      </form>
-    </FormProvider>
-  );
-}
-```
-
-### Page Wrapper Pattern
-
-Each form has a page component handling submission and result states:
-
-```typescript
-export function RequestPage() {
-  const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitResult, setSubmitResult] = useState<{
-    success: boolean;
-    requestId?: string;
-    error?: string;
-  } | null>(null);
-
-  const handleSubmit = async (data: FormRequest) => {
-    setIsSubmitting(true);
-    try {
-      const response = await submitRequest({
-        ...data,
-        user: isAuthenticated && user ? { id: user.id, ... } : undefined,
-      });
-      setSubmitResult({ success: true, requestId: response.data.requestId });
-    } catch {
-      setSubmitResult({ success: false, error: "An unexpected error occurred" });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Render success state, error state, or form
-  if (submitResult?.success) return <SuccessCard />;
-  if (submitResult?.success === false) return <ErrorCard />;
-  return <RequestForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />;
-}
-```
-
-### API Functions Pattern
-
-Add submission functions to `src/lib/api.ts`:
-
-```typescript
-export type RequestSubmission = FormRequest & {
-  user?: {
-    id: string;
-    email: string | null;
-    username: string | null;
-    fullName: string | null;
-  };
-};
-
-export async function submitRequest(
-  request: RequestSubmission,
-): Promise<APIResponse<{ requestId: string }>> {
-  // Currently mocked - will connect to real backend
-  await delay(MOCK_DELAY);
-  console.log(`[MOCK API] POST ${API_BASE_URL}/requests`);
-  return { success: true, data: { requestId: `req-${Date.now()}` } };
-}
-```
-
-### Routing Pattern
-
-Add routes in `src/App.tsx`:
-
-```typescript
-// Protected route (requires authentication)
-<Route
-  path="/request/vm"
-  element={
-    <ProtectedRoute>
-      <VMRequestPage />
-    </ProtectedRoute>
-  }
-/>
-
-// Public route (anonymous access allowed)
-<Route
-  path="/request/tum-guest"
-  element={<TUMGuestRequestPage />}
-/>
-```
+Each form page handles: submission state, success/error result display, and API call. Uses `useAuth()` to include user info when authenticated.
 
 ### Authentication-Aware Forms
 
-For forms that behave differently based on login status:
+1. `useAuth()` hook for `isAuthenticated` and `user`
+2. `z.discriminatedUnion("isLoggedIn", [...])` for conditional schemas
+3. Different steps/fields based on auth state
+4. User info included in submission payload when authenticated
 
-1. Use `useAuth()` hook to get `isAuthenticated` and `user`
-2. Use `z.discriminatedUnion("isLoggedIn", [...])` for conditional schemas
-3. Show different steps/fields based on `isAuthenticated`
-4. Include user info in submission when authenticated
+## Server-Side Patterns
 
-### Existing Forms Reference
+Request flow: **Route → Schema validation → Service → Model → Database**
 
-| Form | Route | Auth Required | Type |
-|------|-------|---------------|------|
-| VM Request | `/request/vm` | Yes | Multi-step |
-| VM Access Request | `/request/vm-access` | Yes | Single-page |
-| Artemis Developer | `/request/artemis` | No* | Multi-step |
-| TUM Guest Account | `/request/tum-guest` | No | Multi-step |
+- **Routes** (`api/routes/`): FastAPI endpoints, auth dependency injection
+- **Schemas** (`schemas/`): Pydantic models for request/response validation
+- **Models** (`models/`): SQLAlchemy ORM with async sessions
+- **Services** (`services/`): Business logic, ticket creation
+- **Descriptions** (`services/descriptions/`): Build formatted ticket descriptions from request data
+- **Ticket** (`services/ticket/`): Abstract base + implementations (Jira, Redmine, Debug, NoOp)
 
-*Artemis form works for both authenticated and anonymous users with different flows.
+## Code Standards
 
-## Notes for AI Assistant
+### TypeScript (Client)
 
-### When Adding Features
+- Strict mode, path aliases: `@/components`, `@/lib`, `@/hooks`, `@/ui`
+- Biome: 2-space indent, double quotes, auto import organization
 
-1. Always check if a shadcn component exists first
-2. Use TypeScript interfaces for all props and data structures
-3. Implement proper form validation
-4. Follow the established folder structure
-5. Use Biome for all formatting (npm run lint)
-6. Test responsive design at mobile, tablet, and desktop sizes
-7. Ensure accessibility (ARIA labels, keyboard navigation)
+### Python (Server)
 
-### Common Tasks
+- Ruff: line length 100, rules E/W/F/I/B/C4/UP/ARG/SIM
+- Pydantic for all API schemas, Pydantic Settings for config
+- Async throughout (asyncpg, async SQLAlchemy sessions)
 
-- **Add new form field**: Use shadcn Form components with validation
-- **New page/route**: Consider React Router setup
-- **API integration**: Plan for fetch/axios with TypeScript types
-- **Form state**: Use React Hook Form or similar for complex forms
-- **Styling**: Use Tailwind utilities, refer to theme in index.css
+## Code Quality Checklist
 
-### Code Quality Checklist
-
-- [ ] TypeScript types defined
-- [ ] Components properly typed
-- [ ] Biome lint passes
-- [ ] Responsive design implemented
-- [ ] Accessibility considered
-- [ ] Error states handled
-- [ ] Loading states implemented
+- [ ] TypeScript types / Pydantic schemas defined
+- [ ] Biome lint passes (client), Ruff + ty pass (server)
+- [ ] Responsive design (mobile, tablet, desktop)
+- [ ] Accessibility (ARIA labels, keyboard navigation)
+- [ ] Error and loading states handled
 - [ ] Form validation working
 - [ ] shadcn components used where applicable
