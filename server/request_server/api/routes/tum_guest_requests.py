@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from request_server.core.config import settings
 from request_server.core.security import CurrentUser, get_current_user, get_optional_current_user
 from request_server.db.session import get_db
 from request_server.models.tum_guest_request import Gender as GenderModel
@@ -124,7 +125,7 @@ async def create_tum_guest_request(
             await db.commit()
             await db.refresh(guest_request)
             logger.info(f"Created ticket {ticket_key} for TUM guest request {guest_request.id}")
-        else:
+        elif settings.ticket_system != "debug":
             logger.warning(f"Failed to create ticket for TUM guest request {guest_request.id}")
     except Exception as e:
         logger.error(f"Error creating ticket for TUM guest request {guest_request.id}: {e}")

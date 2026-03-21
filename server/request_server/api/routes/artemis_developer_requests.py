@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from request_server.core.config import settings
 from request_server.core.security import CurrentUser, get_current_user, get_optional_current_user
 from request_server.db.session import get_db
 from request_server.models.artemis_developer_request import (
@@ -99,7 +100,7 @@ async def create_artemis_developer_request(
             logger.info(
                 f"Created ticket {ticket_key} for Artemis developer request {artemis_request.id}"
             )
-        else:
+        elif settings.ticket_system != "debug":
             logger.warning(
                 f"Failed to create ticket for Artemis developer request {artemis_request.id}"
             )

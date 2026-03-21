@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from request_server.api.routes.ssh_keys import parse_ssh_key
+from request_server.core.config import settings
 from request_server.core.security import CurrentUser, get_current_user
 from request_server.db.session import get_db
 from request_server.models.ssh_key import SSHKey
@@ -146,7 +147,7 @@ async def create_vm_request(
             await db.commit()
             await db.refresh(vm_request)
             logger.info(f"Created ticket {ticket_key} for VM request {vm_request.id}")
-        else:
+        elif settings.ticket_system != "debug":
             logger.warning(f"Failed to create ticket for VM request {vm_request.id}")
     except Exception as e:
         logger.error(f"Error creating ticket for VM request {vm_request.id}: {e}")

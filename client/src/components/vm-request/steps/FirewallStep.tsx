@@ -91,6 +91,7 @@ export function FirewallStep() {
             size="icon"
             className="sm:w-auto sm:px-3"
             onClick={addPort}
+            aria-label="Add Port"
           >
             <Plus className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">Add Port</span>
