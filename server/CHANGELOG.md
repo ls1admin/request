@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.2.1 (2026-03-21)
+
+### Bug Fixes
+
+- Allow clearing image URL and description fields
+  ([`9b76dc4`](https://github.com/magkue/request/commit/9b76dc494da4652c54553e051e84a6ec59078f10))
+
+### Chores
+
+- **release**: 1.3.1 [skip ci]
+  ([`5fad10c`](https://github.com/magkue/request/commit/5fad10cc255bdcec0d5f066c057720bf22f6052b))
+
+
 ## v1.2.0 (2026-03-21)
 
 ### Bug Fixes
