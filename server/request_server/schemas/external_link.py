@@ -66,7 +66,16 @@ class ExternalLinkUpdate(BaseModel):
     @classmethod
     def validate_image_url(cls, v: str | None) -> str | None:
         if v is not None:
+            if not v.strip():
+                return None
             return _validate_url(v)
+        return v
+
+    @field_validator("description")
+    @classmethod
+    def validate_description(cls, v: str | None) -> str | None:
+        if v is not None and not v.strip():
+            return None
         return v
 
 

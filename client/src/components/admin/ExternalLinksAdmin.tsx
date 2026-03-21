@@ -170,8 +170,8 @@ function SortableLinkItem({ link, onUpdate, onDelete }: SortableLinkItemProps) {
     onUpdate(link.id, {
       label: editData.label.trim(),
       url: editData.url.trim(),
-      imageUrl: editData.imageUrl.trim() || undefined,
-      description: editData.description.trim() || undefined,
+      imageUrl: editData.imageUrl.trim(),
+      description: editData.description.trim(),
     });
     setIsEditing(false);
   };
