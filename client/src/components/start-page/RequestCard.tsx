@@ -49,7 +49,10 @@ export function RequestCard({
         <div className="flex items-start justify-between">
           <Icon className="h-6 w-6 text-primary transition-transform group-hover:scale-110" />
           {isLocked && (
-            <Badge variant="highlighted" className="gap-0.5 text-[10px] sm:gap-1 sm:text-xs">
+            <Badge
+              variant="highlighted"
+              className="gap-0.5 text-[10px] sm:gap-1 sm:text-xs"
+            >
               <Lock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
               <span className="hidden sm:inline">Sign in required</span>
               <span className="sm:hidden">Login</span>

@@ -50,6 +50,8 @@ async def clear_debug_tickets() -> dict:
 async def clear_database(db: Annotated[AsyncSession, Depends(get_db)]) -> dict:
     """Truncate all request tables. Called between tests."""
     tables = [
+        "external_links",
+        "external_link_sections",
         "vm_requests",
         "vm_access_requests",
         "tum_guest_requests",

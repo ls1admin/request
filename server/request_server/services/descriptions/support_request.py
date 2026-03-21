@@ -26,16 +26,12 @@ logger = logging.getLogger(__name__)
 class SupportRequestDescriptionBuilder:
     """Builds summary, description, and welcome comment for support requests."""
 
-    def build_summary(
-        self, support_request: SupportRequest, is_authenticated: bool
-    ) -> str:
+    def build_summary(self, support_request: SupportRequest, is_authenticated: bool) -> str:
         if is_authenticated:
             return f"[Support] {support_request.subject} - {support_request.requester_username}"
         return f"[Support] {support_request.subject} - {support_request.anonymous_name} (anonymous)"
 
-    def build_description(
-        self, support_request: SupportRequest, is_authenticated: bool
-    ) -> str:
+    def build_description(self, support_request: SupportRequest, is_authenticated: bool) -> str:
         sections = [
             heading(2, "Support Request"),
             "",

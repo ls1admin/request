@@ -25,6 +25,7 @@ class TokenPayload(BaseModel):
     given_name: str | None = None
     family_name: str | None = None
     realm_access: dict | None = None
+    resource_access: dict | None = None
 
 
 class CurrentUser(BaseModel):
@@ -37,7 +38,7 @@ class CurrentUser(BaseModel):
 
     @property
     def is_admin(self) -> bool:
-        return "admin" in self.roles
+        return settings.keycloak_admin_role in self.roles
 
     @property
     def full_name(self) -> str | None:
@@ -60,7 +61,7 @@ def _get_bypass_user() -> "CurrentUser":
             email="test@tum.de",
             first_name="Test",
             last_name="User",
-            roles=["admin"],
+            roles=["request-admin"],
         )
     return _BYPASS_USER
 
@@ -142,8 +143,8 @@ async def get_current_user(
         return _get_bypass_user()
 
     roles = []
-    if token.realm_access:
-        roles = token.realm_access.get("roles", [])
+    if token.resource_access and settings.keycloak_client_id in token.resource_access:
+        roles = token.resource_access.get(settings.keycloak_client_id, []).get("roles", [])
 
     return CurrentUser(
         id=token.sub,
@@ -212,8 +213,13 @@ async def get_optional_current_user(
         token_payload = TokenPayload(**payload)
 
         roles = []
-        if token_payload.realm_access:
-            roles = token_payload.realm_access.get("roles", [])
+        if (
+            token_payload.resource_access
+            and settings.keycloak_client_id in token_payload.resource_access
+        ):
+            roles = token_payload.resource_access.get(settings.keycloak_client_id, []).get(
+                "roles", []
+            )
 
         return CurrentUser(
             id=token_payload.sub,

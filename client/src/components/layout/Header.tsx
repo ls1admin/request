@@ -11,11 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { APP_NAME } from "@/config/app";
 import { useAuth } from "@/hooks/useAuth";
 
-interface HeaderProps {
-  onAdminSettingsClick?: () => void;
-}
-
-export function Header({ onAdminSettingsClick }: HeaderProps) {
+export function Header() {
   const { isAuthenticated, user, login, logout } = useAuth();
 
   return (
@@ -30,10 +26,12 @@ export function Header({ onAdminSettingsClick }: HeaderProps) {
         {/* Auth Section */}
         {isAuthenticated && user ? (
           <div className="flex items-center gap-2">
-            {user.isAdmin && onAdminSettingsClick && (
-              <Button variant="ghost" size="sm" onClick={onAdminSettingsClick}>
-                <Settings className="mr-2 h-4 w-4" />
-                Admin
+            {user.isAdmin && (
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/admin/external-links">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Admin
+                </Link>
               </Button>
             )}
             <Popover>

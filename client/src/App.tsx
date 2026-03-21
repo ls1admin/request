@@ -3,6 +3,7 @@ import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { AboutPage } from "@/pages/AboutPage";
 import { ArtemisRequestPage } from "@/pages/ArtemisRequestPage";
+import { ExternalLinksAdminPage } from "@/pages/ExternalLinksAdminPage";
 import { ImprintPage } from "@/pages/ImprintPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
 import { StartPage } from "@/pages/StartPage";
@@ -36,6 +37,14 @@ function App() {
           />
           <Route path="/request/tum-guest" element={<TUMGuestRequestPage />} />
           <Route path="/request/support" element={<SupportRequestPage />} />
+          <Route
+            path="/admin/external-links"
+            element={
+              <ProtectedRoute requireAdmin>
+                <ExternalLinksAdminPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/imprint" element={<ImprintPage />} />

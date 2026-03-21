@@ -97,6 +97,7 @@ export const api = {
       method: "PUT",
       body: JSON.stringify(data),
     });
+    if (response.status === 204) return undefined as T;
     return response.json();
   },
 

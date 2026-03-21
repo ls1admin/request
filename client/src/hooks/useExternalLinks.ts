@@ -1,60 +1,32 @@
 import { useCallback, useEffect, useState } from "react";
-import { externalLinks as defaultLinks } from "@/config/external-links";
-import type { ExternalLink } from "@/types/external-links";
-
-const STORAGE_KEY = "aet-request-external-links";
+import { externalLinksService } from "@/services/external-links";
+import type { ExternalLinkSection } from "@/types/external-links";
 
 /**
- * Hook to manage external links with localStorage persistence
- * Allows admins to customize links without backend changes
+ * Hook to fetch external link sections from the API (public endpoint).
+ * Returns only enabled links within each section.
  */
 export function useExternalLinks() {
-  const [links, setLinks] = useState<ExternalLink[]>(defaultLinks);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [sections, setSections] = useState<ExternalLinkSection[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load from localStorage on mount
+  const fetchSections = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const data = await externalLinksService.listSections();
+      setSections(data);
+      setError(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load links");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as ExternalLink[];
-        setLinks(parsed);
-      }
-    } catch {
-      // If parsing fails, use defaults
-      console.warn("Failed to load external links from localStorage");
-    }
-    setIsLoaded(true);
-  }, []);
+    fetchSections();
+  }, [fetchSections]);
 
-  // Save to localStorage
-  const saveLinks = useCallback((newLinks: ExternalLink[]) => {
-    setLinks(newLinks);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newLinks));
-    } catch {
-      console.error("Failed to save external links to localStorage");
-    }
-  }, []);
-
-  // Reset to defaults
-  const resetToDefaults = useCallback(() => {
-    setLinks(defaultLinks);
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      console.error("Failed to remove external links from localStorage");
-    }
-  }, []);
-
-  // Get only enabled links
-  const enabledLinks = links.filter((link) => link.enabled);
-
-  return {
-    links,
-    enabledLinks,
-    isLoaded,
-    saveLinks,
-    resetToDefaults,
-  };
+  return { sections, isLoading, error, refetch: fetchSections };
 }

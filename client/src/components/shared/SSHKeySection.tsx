@@ -123,7 +123,11 @@ export function SSHKeySection({ fieldPrefix = "sshKey" }: SSHKeySectionProps) {
                           key={key.id}
                           className="flex items-center space-x-3 overflow-hidden rounded-lg border p-4"
                         >
-                          <RadioGroupItem value={key.id} id={key.id} className="shrink-0" />
+                          <RadioGroupItem
+                            value={key.id}
+                            id={key.id}
+                            className="shrink-0"
+                          />
                           <Label
                             htmlFor={key.id}
                             className="flex min-w-0 flex-1 cursor-pointer items-center justify-between gap-2"

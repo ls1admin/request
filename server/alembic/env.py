@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 from request_server.core.config import settings
 from request_server.db.base import Base
-from request_server.models.vm_request import VMRequest  # noqa: F401 - Import for metadata
+from request_server.models import *  # noqa: F401, F403 - Import all models for metadata
 
 config = context.config
 

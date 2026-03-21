@@ -85,7 +85,13 @@ export function FirewallStep() {
               Each additional port requires a reason.
             </p>
           </div>
-          <Button type="button" variant="outline" size="icon" className="sm:w-auto sm:px-3" onClick={addPort}>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="sm:w-auto sm:px-3"
+            onClick={addPort}
+          >
             <Plus className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">Add Port</span>
           </Button>

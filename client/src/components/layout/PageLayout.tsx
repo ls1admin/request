@@ -7,7 +7,6 @@ interface PageLayoutProps {
   className?: string;
   showHeader?: boolean;
   showFooter?: boolean;
-  onAdminSettingsClick?: () => void;
 }
 
 export function PageLayout({
@@ -15,11 +14,10 @@ export function PageLayout({
   className = "",
   showHeader = true,
   showFooter = true,
-  onAdminSettingsClick,
 }: PageLayoutProps) {
   return (
     <div className={`flex min-h-screen flex-col ${className}`}>
-      {showHeader && <Header onAdminSettingsClick={onAdminSettingsClick} />}
+      {showHeader && <Header />}
       <main className="flex-1">{children}</main>
       {showFooter && <Footer />}
     </div>

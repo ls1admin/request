@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     keycloak_url: str = "https://keycloak.example.com"
     keycloak_realm: str = "aet"
     keycloak_client_id: str = "aet-request"
+    keycloak_admin_role: str = "admin"
 
     # Ticket System
     ticket_system: str = "jira"  # "jira", "redmine", "noop"

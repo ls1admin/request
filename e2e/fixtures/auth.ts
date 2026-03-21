@@ -27,9 +27,9 @@ function createFakeJwt(): string {
     given_name: "Test",
     family_name: "User",
     email: "test@tum.de",
-    realm_access: { roles: ["admin"] },
+    realm_access: { roles: ["request-admin"] },
     resource_access: {
-      [CLIENT_ID]: { roles: ["admin"] },
+      [CLIENT_ID]: { roles: ["request-admin"] },
     },
   };
   const sig = "fake-signature";

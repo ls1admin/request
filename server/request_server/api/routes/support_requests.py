@@ -82,17 +82,11 @@ async def create_support_request(
             support_request.jira_ticket_key = ticket_key
             await db.commit()
             await db.refresh(support_request)
-            logger.info(
-                f"Created ticket {ticket_key} for support request {support_request.id}"
-            )
+            logger.info(f"Created ticket {ticket_key} for support request {support_request.id}")
         else:
-            logger.warning(
-                f"Failed to create ticket for support request {support_request.id}"
-            )
+            logger.warning(f"Failed to create ticket for support request {support_request.id}")
     except Exception as e:
-        logger.error(
-            f"Error creating ticket for support request {support_request.id}: {e}"
-        )
+        logger.error(f"Error creating ticket for support request {support_request.id}: {e}")
         # Don't fail the request if ticket creation fails
 
     return support_request
@@ -110,9 +104,7 @@ async def list_support_requests(
     Admin users can see all requests.
     """
     if current_user.is_admin:
-        query = select(SupportRequestModel).order_by(
-            SupportRequestModel.created_at.desc()
-        )
+        query = select(SupportRequestModel).order_by(SupportRequestModel.created_at.desc())
     else:
         query = (
             select(SupportRequestModel)
@@ -130,9 +122,7 @@ async def get_support_request(
     db: Annotated[AsyncSession, Depends(get_db)],
 ) -> SupportRequestModel:
     """Get a specific support request."""
-    query = select(SupportRequestModel).where(
-        SupportRequestModel.id == request_id
-    )
+    query = select(SupportRequestModel).where(SupportRequestModel.id == request_id)
     result = await db.execute(query)
     support_request = result.scalar_one_or_none()
 

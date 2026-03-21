@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { ExternalLinksAdmin } from "@/components/admin/ExternalLinksAdmin";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ExternalLinksSection } from "@/components/start-page/ExternalLinksSection";
 import { RequestFormsSection } from "@/components/start-page/RequestFormsSection";
@@ -12,23 +10,9 @@ import { useExternalLinks } from "@/hooks/useExternalLinks";
 
 export function StartPage() {
   const { isLoading, login, error } = useAuth();
-  const { links, saveLinks, resetToDefaults, isLoaded } = useExternalLinks();
-  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const { sections, isLoading: linksLoading } = useExternalLinks();
 
-  const handleAdminSettingsClick = () => {
-    setShowAdminPanel(true);
-  };
-
-  const handleCloseAdminPanel = () => {
-    setShowAdminPanel(false);
-  };
-
-  const handleSaveLinks = (newLinks: typeof links) => {
-    saveLinks(newLinks);
-    setShowAdminPanel(false);
-  };
-
-  if (isLoading || !isLoaded) {
+  if (isLoading || linksLoading) {
     return (
       <PageLayout>
         <div className="flex min-h-[80vh] flex-col items-center justify-center gap-3">
@@ -61,29 +45,11 @@ export function StartPage() {
     );
   }
 
-  if (showAdminPanel) {
-    return (
-      <PageLayout onAdminSettingsClick={handleAdminSettingsClick}>
-        <div className="container mx-auto px-4 py-8">
-          <ExternalLinksAdmin
-            links={links}
-            onSave={handleSaveLinks}
-            onReset={() => {
-              resetToDefaults();
-              setShowAdminPanel(false);
-            }}
-            onClose={handleCloseAdminPanel}
-          />
-        </div>
-      </PageLayout>
-    );
-  }
-
   return (
-    <PageLayout onAdminSettingsClick={handleAdminSettingsClick}>
+    <PageLayout>
       <RequestFormsSection />
       <SupportSection />
-      <ExternalLinksSection links={links} />
+      <ExternalLinksSection sections={sections} />
     </PageLayout>
   );
 }
