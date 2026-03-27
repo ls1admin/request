@@ -12,6 +12,15 @@ data:
   KEYCLOAK_URL: {{ .Values.server.config.KEYCLOAK_URL | quote }}
   KEYCLOAK_REALM: {{ .Values.server.config.KEYCLOAK_REALM | quote }}
   KEYCLOAK_CLIENT_ID: {{ .Values.server.config.KEYCLOAK_CLIENT_ID | quote }}
+  KEYCLOAK_ADMIN_ROLE: {{ .Values.server.config.KEYCLOAK_ADMIN_ROLE | quote }}
+  TICKET_SYSTEM: {{ .Values.server.config.TICKET_SYSTEM | quote }}
+  SECONDARY_REPORTER_FIELD: {{ .Values.server.config.SECONDARY_REPORTER_FIELD | quote }}
+  SERVICE_ACCOUNT_NAME: {{ .Values.server.config.SERVICE_ACCOUNT_NAME | quote }}
   JIRA_URL: {{ .Values.server.config.JIRA_URL | quote }}
   JIRA_PROJECT: {{ .Values.server.config.JIRA_PROJECT | quote }}
+  REDMINE_URL: {{ .Values.server.config.REDMINE_URL | quote }}
+  REDMINE_PROJECT: {{ .Values.server.config.REDMINE_PROJECT | quote }}
+  REDMINE_GROUP_ID: {{ .Values.server.config.REDMINE_GROUP_ID | quote }}
+  REDMINE_TRACKER_ID: {{ .Values.server.config.REDMINE_TRACKER_ID | quote }}
+  REDMINE_USERNAME: {{ .Values.server.config.REDMINE_USERNAME | quote }}
   GITLAB_URL: {{ .Values.server.config.GITLAB_URL | quote }}

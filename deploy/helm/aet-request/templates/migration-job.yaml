@@ -7,8 +7,8 @@ metadata:
     {{- include "aet-request.labels" . | nindent 4 }}
     app.kubernetes.io/component: migration
   annotations:
-    "helm.sh/hook": pre-upgrade,pre-install
-    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   backoffLimit: 3

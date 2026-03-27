@@ -69,13 +69,23 @@ server:
     KEYCLOAK_URL: ""
     KEYCLOAK_REALM: ""
     KEYCLOAK_CLIENT_ID: ""
+    KEYCLOAK_ADMIN_ROLE: admin
+    TICKET_SYSTEM: jira
+    SECONDARY_REPORTER_FIELD: customfield_12200
+    SERVICE_ACCOUNT_NAME: ""
     JIRA_URL: ""
     JIRA_PROJECT: ""
+    REDMINE_URL: ""
+    REDMINE_PROJECT: ""
+    REDMINE_GROUP_ID: "0"
+    REDMINE_TRACKER_ID: "0"
+    REDMINE_USERNAME: ""
     GITLAB_URL: ""
   secrets:
     databaseUrl: ""
     jiraUsername: ""
     jiraApiToken: ""
+    redmineApiKey: ""
     gitlabToken: ""
 
 ingress:
