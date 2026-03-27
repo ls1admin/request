@@ -24,30 +24,34 @@ interface SSHKeySectionProps {
 }
 
 export function SSHKeySection({ fieldPrefix = "sshKey" }: SSHKeySectionProps) {
-  const form = useFormContext();
+  const { watch, control, setValue } = useFormContext();
   const [storedKeys, setStoredKeys] = useState<StoredSSHKey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const sshKeyType = form.watch(`${fieldPrefix}.type`);
-  const newPublicKey = form.watch(`${fieldPrefix}.publicKey`);
+  const sshKeyType = watch(`${fieldPrefix}.type`);
+  const newPublicKey = watch(`${fieldPrefix}.publicKey`);
 
   useEffect(() => {
     async function loadKeys() {
       const response = await fetchSSHKeys();
       if (response.success && response.data) {
         setStoredKeys(response.data);
+        setValue(
+          `${fieldPrefix}.type`,
+          response.data.length > 0 ? "existing" : "new",
+        );
       }
       setIsLoading(false);
     }
     loadKeys();
-  }, []);
+  }, [fieldPrefix, setValue]);
 
   const keyValidation = newPublicKey ? validateSSHKey(newPublicKey) : null;
 
   return (
     <div className="space-y-6">
       <FormField
-        control={form.control}
+        control={control}
         name={`${fieldPrefix}.type`}
         render={({ field }) => (
           <FormItem>
@@ -107,7 +111,7 @@ export function SSHKeySection({ fieldPrefix = "sshKey" }: SSHKeySectionProps) {
             </div>
           ) : storedKeys.length > 0 ? (
             <FormField
-              control={form.control}
+              control={control}
               name={`${fieldPrefix}.keyId`}
               render={({ field }) => (
                 <FormItem>
@@ -161,7 +165,7 @@ export function SSHKeySection({ fieldPrefix = "sshKey" }: SSHKeySectionProps) {
       {sshKeyType === "new" && (
         <div className="space-y-4">
           <FormField
-            control={form.control}
+            control={control}
             name={`${fieldPrefix}.name`}
             render={({ field }) => (
               <FormItem>
@@ -182,7 +186,7 @@ export function SSHKeySection({ fieldPrefix = "sshKey" }: SSHKeySectionProps) {
           />
 
           <FormField
-            control={form.control}
+            control={control}
             name={`${fieldPrefix}.publicKey`}
             render={({ field }) => (
               <FormItem>
