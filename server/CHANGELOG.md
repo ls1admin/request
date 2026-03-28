@@ -2,6 +2,39 @@
 
 <!-- version list -->
 
+## v1.3.0 (2026-03-28)
+
+### Bug Fixes
+
+- **auth**: Set token getter synchronously to prevent 401 on reload for admin page
+  ([`56c5bdc`](https://github.com/magkue/request/commit/56c5bdc37f68280e153a45a97eebbc880c73ec52))
+
+### Chores
+
+- Fix formatting
+  ([`32084a2`](https://github.com/magkue/request/commit/32084a22b162e00f3946af7558f42b45f247468a))
+
+- Fix tests
+  ([`ce89929`](https://github.com/magkue/request/commit/ce8992928ca28798e81b013299a591cb120ae6bb))
+
+- Update READMEs and AGENTS.md
+  ([`739214e`](https://github.com/magkue/request/commit/739214e9bf9e844d721ce87dad38435906d14e3e))
+
+- **helm**: Update chart for Redmine support and PostgreSQL 18
+  ([`78616ea`](https://github.com/magkue/request/commit/78616ea1e11f0216c88df9d6818a151cf0c5c5f5))
+
+- **release**: 1.4.0 [skip ci]
+  ([`748bc64`](https://github.com/magkue/request/commit/748bc64a150e41df9d910261bcbc4bbe79593090))
+
+### Features
+
+- **retention**: Add automatic data retention with GDPR-compliant privacy updates
+  ([`ce9561b`](https://github.com/magkue/request/commit/ce9561b144218db40678a23fb1edcf5af8a184b5))
+
+- **ssh**: Preselect existing key option when user has stored keys
+  ([`852f0d9`](https://github.com/magkue/request/commit/852f0d9c35db2ebca11d48bfd5641537a98e5704))
+
+
 ## v1.2.1 (2026-03-21)
 
 ### Bug Fixes
