@@ -8,7 +8,7 @@ client:
   image:
     repository: ghcr.io/example/aet-request-client
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 80
@@ -41,7 +41,7 @@ server:
   image:
     repository: ghcr.io/example/aet-request-server
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   service:
     type: ClusterIP
     port: 80
