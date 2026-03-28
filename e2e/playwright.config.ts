@@ -49,7 +49,7 @@ export default defineConfig({
       },
     },
     {
-      command: `cd ../client && VITE_API_BASE_URL=${SERVER_URL}/api/v1 VITE_KEYCLOAK_URL=http://localhost:18080 VITE_KEYCLOAK_REALM=tum VITE_KEYCLOAK_CLIENT_ID=requestaccess npm run dev -- --port ${CLIENT_PORT}`,
+      command: `cd ../client && VITE_API_BASE_URL=${SERVER_URL}/api/v1 VITE_KEYCLOAK_URL=http://localhost:18080 VITE_KEYCLOAK_REALM=tum VITE_KEYCLOAK_CLIENT_ID=requestaccess VITE_ADMIN_ROLE=request-admin npm run dev -- --port ${CLIENT_PORT}`,
       port: CLIENT_PORT,
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
