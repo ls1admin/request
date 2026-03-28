@@ -60,6 +60,9 @@ class Settings(BaseSettings):
     gitlab_url: str = ""
     gitlab_token: str = ""
 
+    # Data retention
+    retention_days: int = 365
+
     @property
     def jira_enabled(self) -> bool:
         return bool(

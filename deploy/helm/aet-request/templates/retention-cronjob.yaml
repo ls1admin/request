@@ -1,0 +1,46 @@
+{{- if .Values.server.retention.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "aet-request.server.fullname" . }}-retention
+  labels:
+    {{- include "aet-request.labels" . | nindent 4 }}
+    app.kubernetes.io/component: retention
+spec:
+  schedule: {{ .Values.server.retention.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 300
+      template:
+        metadata:
+          labels:
+            {{- include "aet-request.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: retention
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          restartPolicy: Never
+          containers:
+            - name: retention
+              image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag }}"
+              imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+              command: ["retention-cleanup"]
+              envFrom:
+                - configMapRef:
+                    name: {{ include "aet-request.server.fullname" . }}
+                - secretRef:
+                    name: {{ include "aet-request.server.fullname" . }}
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 300m
+                  memory: 256Mi
+{{- end }}

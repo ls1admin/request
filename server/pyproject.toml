@@ -40,6 +40,9 @@ ci = [
     "python-semantic-release>=10.5.0,<11.0.0",
 ]
 
+[project.scripts]
+retention-cleanup = "request_server.cli:run_retention"
+
 [tool.uv.build-backend]
 module-root = "."
 

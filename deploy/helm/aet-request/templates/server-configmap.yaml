@@ -24,3 +24,4 @@ data:
   REDMINE_TRACKER_ID: {{ .Values.server.config.REDMINE_TRACKER_ID | quote }}
   REDMINE_USERNAME: {{ .Values.server.config.REDMINE_USERNAME | quote }}
   GITLAB_URL: {{ .Values.server.config.GITLAB_URL | quote }}
+  RETENTION_DAYS: {{ .Values.server.retention.retentionDays | quote }}

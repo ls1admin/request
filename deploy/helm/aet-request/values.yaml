@@ -62,6 +62,10 @@ server:
     minAvailable: 1
   migration:
     enabled: true
+  retention:
+    enabled: true
+    schedule: "0 3 * * *"    # daily at 3am
+    retentionDays: 365
   config:
     APP_NAME: aet-request-server
     DEBUG: "false"
