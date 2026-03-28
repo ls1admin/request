@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { APP_NAME } from "@/config/app";
+import { APP_ENVIRONMENT, APP_NAME } from "@/config/app";
 import { useAuth } from "@/hooks/useAuth";
 
 export function Header() {
@@ -21,6 +21,11 @@ export function Header() {
         <Link to="/" className="flex items-center gap-2">
           <img src={AETLogo} alt="AET Logo" className="h-8" />
           <span className="font-semibold">{APP_NAME}</span>
+          {APP_ENVIRONMENT !== "production" && (
+            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+              {APP_ENVIRONMENT}
+            </span>
+          )}
         </Link>
 
         {/* Auth Section */}

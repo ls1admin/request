@@ -4,3 +4,4 @@ export const APP_VERSION = __APP_VERSION__;
 export const APP_NAME = "AET Request";
 export const APP_DESCRIPTION =
   "Request virtual machines, access permissions, and other resources at the Applied Education Technologies research group.";
+export const APP_ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT ?? "production";

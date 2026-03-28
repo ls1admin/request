@@ -11,3 +11,4 @@ data:
   VITE_KEYCLOAK_REALM: {{ .Values.client.config.VITE_KEYCLOAK_REALM | quote }}
   VITE_KEYCLOAK_CLIENT_ID: {{ .Values.client.config.VITE_KEYCLOAK_CLIENT_ID | quote }}
   VITE_ADMIN_ROLE: {{ .Values.client.config.VITE_ADMIN_ROLE | quote }}
+  VITE_ENVIRONMENT: {{ .Values.client.config.VITE_ENVIRONMENT | quote }}
