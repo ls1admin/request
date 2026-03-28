@@ -2,6 +2,27 @@
 
 <!-- version list -->
 
+## v1.4.0 (2026-03-28)
+
+### Chores
+
+- **release**: 1.5.0 [skip ci]
+  ([`24c3a15`](https://github.com/magkue/request/commit/24c3a15d2e7e244b752b4e85b494a7c4156c5f87))
+
+### Continuous Integration
+
+- **e2e**: Fix e2e tests
+  ([`9bfed6d`](https://github.com/magkue/request/commit/9bfed6da75b8b25e6b8335d18e8268f772ad45ba))
+
+- **e2e**: Fix e2e tests
+  ([`07b7455`](https://github.com/magkue/request/commit/07b7455c411d0ae72c5537a3ff2c97e0afdccbad))
+
+### Features
+
+- **ui**: Add environment badge to header for non-production deployments
+  ([`d197bf2`](https://github.com/magkue/request/commit/d197bf2f85cbb0379da9905ebaab867314dd54ac))
+
+
 ## v1.3.0 (2026-03-28)
 
 ### Bug Fixes
