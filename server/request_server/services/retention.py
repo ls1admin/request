@@ -46,9 +46,7 @@ async def cleanup_expired_requests() -> int:
 
     async with async_session_maker() as session:
         for model in REQUEST_MODELS:
-            result = await session.execute(
-                delete(model).where(model.created_at < cutoff)
-            )
+            result = await session.execute(delete(model).where(model.created_at < cutoff))
             count = getattr(result, "rowcount", 0)
             if count > 0:
                 logger.info("Deleted %d expired rows from %s", count, model.__tablename__)
