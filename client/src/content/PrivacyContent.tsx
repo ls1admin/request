@@ -15,10 +15,6 @@ export function PrivacyContent() {
           The Bavarian Data Protection Act (BayDSG), which applies to public
           institutions in Bavaria
         </li>
-        <li>
-          The Telecommunications Telemedia Data Protection Act (TTDSG), which
-          governs online services and the use of cookies
-        </li>
       </ul>
 
       <p className="mb-4">
@@ -52,7 +48,9 @@ export function PrivacyContent() {
         <li>
           <strong>Artemis Developer Request data:</strong> Name, email addresses
           (main and Slack), GitHub username and profile information (avatar,
-          profile URL), contact person, advisor, and subteam assignments.
+          profile URL, and display name), contact person, advisor, and subteam
+          assignments. For Artemis requests, the entered GitHub username is
+          checked against GitHub&apos;s public API.
         </li>
         <li>
           <strong>TUM Guest Account Request data:</strong> First name, last
@@ -85,10 +83,13 @@ export function PrivacyContent() {
       <h3 className="text-lg font-medium mb-2 mt-6">Legal basis</h3>
 
       <p className="mb-4">
-        The legal basis for processing your request data is Art. 6(1) lit. f
-        GDPR (legitimate interest). The research group has a legitimate interest
-        in efficiently managing and provisioning IT resources, access
-        permissions, and accounts for its members and collaborators.
+        The legal basis for processing your request data is Art. 6(1) lit. e
+        GDPR in conjunction with the applicable provisions of Bavarian data
+        protection law for public bodies. As part of the Technical University
+        of Munich, AET processes personal data insofar as this is necessary for
+        the performance of tasks carried out in the public interest, in
+        particular for the provision and administration of university IT
+        resources, access rights, accounts, and related support processes.
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">Data retention</h3>
@@ -109,7 +110,15 @@ export function PrivacyContent() {
       <ul className="list-disc list-inside space-y-2 mb-4">
         <li>AET staff members responsible for processing your request</li>
         <li>System administrators who provision the requested resources</li>
-        <li>Our issue tracking system for request management</li>
+        <li>
+          Our issue tracking system Redmine for request management, ticket
+          attribution, and communication
+        </li>
+        <li>
+          For authenticated requests, Redmine may receive your username, name,
+          and email address in order to create or provision a user account and
+          assign the ticket to you correctly
+        </li>
       </ul>
 
       <h3 className="text-lg font-medium mb-2 mt-6">Logging</h3>
@@ -157,13 +166,71 @@ export function PrivacyContent() {
         persons.
       </p>
 
-      <h3 className="text-lg font-medium mb-2 mt-6">Cookies</h3>
+      <h3 className="text-lg font-medium mb-2 mt-6">
+        Cookies and browser storage
+      </h3>
 
       <p className="mb-4">
-        This application uses cookies for authentication purposes. When you log
-        in, a session cookie is stored to maintain your authenticated session.
-        These cookies are essential for the functionality of the application and
-        are deleted when you log out or close your browser.
+        This application uses technically necessary mechanisms in your browser
+        to provide core functionality. When you use the personal login via
+        Keycloak, technically necessary authentication data may be processed by
+        means of cookies and browser session storage in order to complete the
+        login, maintain your authenticated session, and securely return you to
+        this application.
+      </p>
+
+      <p className="mb-4">
+        In addition, this application stores technically necessary information
+        in local browser storage only where required for operation:
+      </p>
+
+      <ul className="list-disc list-inside space-y-2 mb-4">
+        <li>
+          <strong>Session storage:</strong> Authentication session information
+          is temporarily stored in the browser for the duration of your session.
+        </li>
+        <li>
+          <strong>Local storage:</strong> We store whether you have dismissed a
+          local announcement so that it does not reappear unnecessarily.
+        </li>
+        <li>
+          <strong>Local browser cache:</strong> Your browser may temporarily
+          cache transmitted files such as pages, scripts, and stylesheets in
+          order to display the application efficiently and securely.
+        </li>
+      </ul>
+
+      <p className="mb-4">
+        This browser storage is used exclusively for technically necessary and
+        user-requested functions. It is not used for tracking, profiling, or
+        marketing purposes. You can delete locally stored data at any time in
+        your browser settings; however, this may affect the availability of the
+        login session or local preferences.
+      </p>
+
+      <h3 className="text-lg font-medium mb-2 mt-6">
+        Email notifications from the ticket system
+      </h3>
+
+      <p className="mb-4">
+        After you submit a request, the ticket system Redmine may send email
+        notifications regarding the creation and processing of your request.
+        These emails are sent to keep you informed about the status of your
+        request and related communication.
+      </p>
+
+      <p className="mb-4">
+        Notification settings can be adjusted or turned off in your personal
+        Redmine settings at{" "}
+        <a
+          href="https://redmine.aet.cit.tum.de"
+          className="text-primary hover:underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          redmine.aet.cit.tum.de
+        </a>
+        . Personal login to this application is handled via Keycloak. You can use your TUM credentials to login.
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">
@@ -224,15 +291,31 @@ export function PrivacyContent() {
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">
+        Right to object
+      </h3>
+
+      <p className="mb-4">
+        In accordance with Art. 21 GDPR, you have the right, on grounds
+        relating to your particular situation, to object at any time to the
+        processing of your personal data where such processing is based on Art.
+        6(1) lit. e GDPR. In that case, we will no longer process your personal
+        data unless we can demonstrate compelling legitimate grounds for the
+        processing which override your interests, rights and freedoms, or the
+        processing serves the establishment, exercise or defence of legal
+        claims.
+      </p>
+
+      <h3 className="text-lg font-medium mb-2 mt-6">
         Right to data portability
       </h3>
 
       <p className="mb-4">
-        You have the right to request the data that we process automatically on
-        the basis of your consent or in fulfillment of a contract to be handed
-        over to you or a third party. The data is provided in a machine-readable
-        format. If you request the direct transfer of the data to another person
-        responsible, this will only be done if it is technically feasible.
+        A right to data portability under Art. 20 GDPR exists only where
+        processing is based on consent or on a contract and is carried out by
+        automated means. As the processing described here is generally carried
+        out on the basis of Art. 6(1) lit. e GDPR for the performance of tasks
+        carried out in the public interest, the right to data portability does
+        not generally apply.
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">
@@ -252,6 +335,26 @@ export function PrivacyContent() {
           krusche@tum.de
         </a>{" "}
         regarding this and other questions on the subject of personal data.
+      </p>
+
+      <h3 className="text-lg font-medium mb-2 mt-6">
+        Data Protection Officer
+      </h3>
+
+      <p className="mb-4">
+        The data protection officer of the Technical University of Munich
+        <br />
+        Postal address: Arcisstrasse 21, 80333 Munich
+        <br />
+        Telephone: +49-(0)89-289-17052
+        <br />
+        E-mail:{" "}
+        <a
+          href="mailto:beauftragter@datenschutz.tum.de"
+          className="text-primary hover:underline"
+        >
+          beauftragter@datenschutz.tum.de
+        </a>
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">SSL/TLS encryption</h3>
