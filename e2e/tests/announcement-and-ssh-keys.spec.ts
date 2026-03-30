@@ -19,7 +19,7 @@ test.describe("Announcement and SSH Keys", () => {
     await expect(page.getByRole("dialog")).toBeVisible();
     await expect(
       page.getByRole("heading", {
-        name: "Request Access is now AET Request." }),
+        name: "Request Access is now AET Request" }),
     ).toBeVisible();
     await expect(page.getByText("Coming soon")).toBeVisible();
 
