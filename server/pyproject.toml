@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "request-server"
-version = "1.5.1"
+version = "1.5.2"
 description = "AET Request API Server"
 authors = [
     { name = "Magnus Kühne", email = "magnus.kuehne@tum.de" },

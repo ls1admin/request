@@ -2,6 +2,30 @@
 
 <!-- version list -->
 
+## v1.5.2 (2026-03-30)
+
+### Bug Fixes
+
+- **privacy**: Correct legal basis and data protection disclosures
+  ([`f51a19c`](https://github.com/magkue/request/commit/f51a19c28ff089e1c42a22bc1620167c71cbb4f2))
+
+- **privacy**: Correct legal basis and data protection disclosures
+  ([`82a8b5a`](https://github.com/magkue/request/commit/82a8b5aea8fc7eceeff3e65bbc98b23bad775041))
+
+### Chores
+
+- **misc**: Only run desktop e2e per defautl, add tls secret name config for redirects
+  ([`b64cb57`](https://github.com/magkue/request/commit/b64cb5712cd22714c0a28899d36f31cbe6dc5126))
+
+- **release**: 1.6.2 [skip ci]
+  ([`18f5a5d`](https://github.com/magkue/request/commit/18f5a5da46b52657178bbe6593d294a3ff7b15f9))
+
+### Continuous Integration
+
+- **e2e**: Fix e2e tests
+  ([`e2a8303`](https://github.com/magkue/request/commit/e2a8303034105147d3e55b68b2ba59c30d43274c))
+
+
 ## v1.5.1 (2026-03-30)
 
 ### Bug Fixes
