@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v1.5.0 (2026-03-30)
+
+### Chores
+
+- **release**: 1.6.0 [skip ci]
+  ([`2963afa`](https://github.com/magkue/request/commit/2963afab3b92a3c4b1070268a1b25c4a9c8f8a65))
+
+### Continuous Integration
+
+- **helm**: Always pull latest version of client and server
+  ([`467f6df`](https://github.com/magkue/request/commit/467f6dfe2634f95dd5d6509d7eb315373eecb138))
+
+### Features
+
+- Add reusable what's new dialog and SSH key management
+  ([`564151b`](https://github.com/magkue/request/commit/564151b5e04ca9dad5febe3493af5a05e7210de4))
+
+
 ## v1.4.0 (2026-03-28)
 
 ### Chores
