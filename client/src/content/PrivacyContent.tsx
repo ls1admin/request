@@ -85,11 +85,11 @@ export function PrivacyContent() {
       <p className="mb-4">
         The legal basis for processing your request data is Art. 6(1) lit. e
         GDPR in conjunction with the applicable provisions of Bavarian data
-        protection law for public bodies. As part of the Technical University
-        of Munich, AET processes personal data insofar as this is necessary for
-        the performance of tasks carried out in the public interest, in
-        particular for the provision and administration of university IT
-        resources, access rights, accounts, and related support processes.
+        protection law for public bodies. As part of the Technical University of
+        Munich, AET processes personal data insofar as this is necessary for the
+        performance of tasks carried out in the public interest, in particular
+        for the provision and administration of university IT resources, access
+        rights, accounts, and related support processes.
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">Data retention</h3>
@@ -230,7 +230,8 @@ export function PrivacyContent() {
         >
           redmine.aet.cit.tum.de
         </a>
-        . Personal login to this application is handled via Keycloak. You can use your TUM credentials to login.
+        . Personal login to this application is handled via Keycloak. You can
+        use your TUM credentials to login.
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">
@@ -290,19 +291,28 @@ export function PrivacyContent() {
         possibility of a judicial remedy pursuant to Article 78 GDPR.
       </p>
 
-      <h3 className="text-lg font-medium mb-2 mt-6">
-        Right to object
-      </h3>
+      <h3 className="text-lg font-medium mb-2 mt-6">Right to object</h3>
 
       <p className="mb-4">
-        In accordance with Art. 21 GDPR, you have the right, on grounds
-        relating to your particular situation, to object at any time to the
-        processing of your personal data where such processing is based on Art.
-        6(1) lit. e GDPR. In that case, we will no longer process your personal
-        data unless we can demonstrate compelling legitimate grounds for the
-        processing which override your interests, rights and freedoms, or the
-        processing serves the establishment, exercise or defence of legal
-        claims.
+        In accordance with Art. 21 GDPR, you have the right, on grounds relating
+        to your particular situation, to object at any time to the processing of
+        your personal data where such processing is based on Art. 6(1) lit. e
+        GDPR. In that case, we will no longer process your personal data unless
+        we can demonstrate compelling legitimate grounds for the processing
+        which override your interests, rights and freedoms, or the processing
+        serves the establishment, exercise or defence of legal claims.
+      </p>
+
+      <h3 className="text-lg font-medium mb-2 mt-6">Right to object</h3>
+
+      <p className="mb-4">
+        In accordance with Art. 21 GDPR, you have the right, on grounds relating
+        to your particular situation, to object at any time to the processing of
+        your personal data where such processing is based on Art. 6(1) lit. e
+        GDPR. In that case, we will no longer process your personal data unless
+        we can demonstrate compelling legitimate grounds for the processing
+        which override your interests, rights and freedoms, or the processing
+        serves the establishment, exercise or defence of legal claims.
       </p>
 
       <h3 className="text-lg font-medium mb-2 mt-6">
@@ -337,9 +347,7 @@ export function PrivacyContent() {
         regarding this and other questions on the subject of personal data.
       </p>
 
-      <h3 className="text-lg font-medium mb-2 mt-6">
-        Data Protection Officer
-      </h3>
+      <h3 className="text-lg font-medium mb-2 mt-6">Data Protection Officer</h3>
 
       <p className="mb-4">
         The data protection officer of the Technical University of Munich
