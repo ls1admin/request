@@ -1,3 +1,4 @@
+import { AnnouncementHost } from "@/components/announcements/AnnouncementHost";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { ExternalLinksSection } from "@/components/start-page/ExternalLinksSection";
 import { RequestFormsSection } from "@/components/start-page/RequestFormsSection";
@@ -47,6 +48,7 @@ export function StartPage() {
 
   return (
     <PageLayout>
+      <AnnouncementHost />
       <RequestFormsSection />
       <SupportSection />
       <ExternalLinksSection sections={sections} />

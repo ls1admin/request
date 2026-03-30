@@ -6,6 +6,7 @@ import { ArtemisRequestPage } from "@/pages/ArtemisRequestPage";
 import { ExternalLinksAdminPage } from "@/pages/ExternalLinksAdminPage";
 import { ImprintPage } from "@/pages/ImprintPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
+import { SSHKeysPage } from "@/pages/SSHKeysPage";
 import { StartPage } from "@/pages/StartPage";
 import { SupportRequestPage } from "@/pages/SupportRequestPage";
 import { TUMGuestRequestPage } from "@/pages/TUMGuestRequestPage";
@@ -37,6 +38,14 @@ function App() {
           />
           <Route path="/request/tum-guest" element={<TUMGuestRequestPage />} />
           <Route path="/request/support" element={<SupportRequestPage />} />
+          <Route
+            path="/account/ssh-keys"
+            element={
+              <ProtectedRoute>
+                <SSHKeysPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/admin/external-links"
             element={

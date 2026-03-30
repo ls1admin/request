@@ -35,6 +35,7 @@ client:
     VITE_KEYCLOAK_CLIENT_ID: ""
     VITE_ADMIN_ROLE: admin
     VITE_ENVIRONMENT: production
+    VITE_WHATS_NEW_ENABLED: "true"
 
 server:
   replicaCount: 2

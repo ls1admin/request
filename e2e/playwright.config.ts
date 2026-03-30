@@ -35,7 +35,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: `cd ../server && DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5433/aet_request_test TICKET_SYSTEM=debug AUTH_BYPASS=true KEYCLOAK_ADMIN_ROLE=request-admin CORS_ORIGINS='["${CLIENT_URL}"]' bash -c "uv run alembic upgrade head && uv run uvicorn request_server.main:app --host 0.0.0.0 --port ${SERVER_PORT}"`,
+      command: `cd ../server && DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5433/aet_request_test TICKET_SYSTEM=debug AUTH_BYPASS=true DEBUG=false KEYCLOAK_ADMIN_ROLE=request-admin CORS_ORIGINS='["${CLIENT_URL}"]' bash -c "uv run alembic upgrade head && uv run uvicorn request_server.main:app --host 0.0.0.0 --port ${SERVER_PORT}"`,
       port: SERVER_PORT,
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
@@ -44,6 +44,7 @@ export default defineConfig({
           "postgresql+asyncpg://postgres:postgres@localhost:5433/aet_request_test",
         TICKET_SYSTEM: "debug",
         AUTH_BYPASS: "true",
+        DEBUG: "false",
         CORS_ORIGINS: `["${CLIENT_URL}"]`,
         KEYCLOAK_ADMIN_ROLE: "request-admin"
       },

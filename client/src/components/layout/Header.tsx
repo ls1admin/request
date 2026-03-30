@@ -1,4 +1,4 @@
-import { LogIn, LogOut, Settings, Shield, User } from "lucide-react";
+import { KeyRound, LogIn, LogOut, Settings, Shield, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import AETLogo from "@/assets/Logo_AET_schwarz_512x512.svg";
 import { Button } from "@/components/ui/button";
@@ -72,6 +72,17 @@ export function Header() {
                     </span>
                   </div>
                   <Separator />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    asChild
+                  >
+                    <Link to="/account/ssh-keys">
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      SSH Keys
+                    </Link>
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"

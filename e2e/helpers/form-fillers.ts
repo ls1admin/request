@@ -15,6 +15,9 @@ import { SERVER_URL } from "../playwright.config";
 // ── Navigation helpers ────────────────────────────────────────────────────
 
 async function navigateFromHome(page: Page, cardTitle: string): Promise<void> {
+  await page.addInitScript(() => {
+    localStorage.setItem("aet-request.whats-new.v1.dismissed", "true");
+  });
   await page.goto("/");
   await page.getByText("Request Forms").waitFor({ timeout: 10000 });
   await page.getByText(cardTitle, { exact: true }).click();

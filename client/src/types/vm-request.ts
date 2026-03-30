@@ -305,11 +305,11 @@ export const defaultVMRequestValues: Partial<VMRequest> = {
   additionalComments: "",
 };
 
-// SSH Key types for mocked API
 export interface StoredSSHKey {
   id: string;
   name: string;
   fingerprint: string;
   type: "rsa" | "ed25519" | "ecdsa";
   createdAt: string;
+  publicKey: string;
 }

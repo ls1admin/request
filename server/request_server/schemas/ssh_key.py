@@ -27,6 +27,7 @@ class SSHKeyResponse(BaseModel):
 
     id: uuid.UUID
     name: str
+    public_key: str = Field(alias="publicKey")
     fingerprint: str
     key_type: SSHKeyType = Field(alias="type")
     created_at: datetime = Field(alias="createdAt")
