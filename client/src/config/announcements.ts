@@ -44,7 +44,7 @@ export const announcements: AnnouncementConfig[] = [
     dismissVersion: "v1",
     title: "Welcome to AET Request",
     badge: "New in this release",
-    headline: "Request Access is now AET Request.",
+    headline: "Request Access is now AET Request",
     description:
       "AET Request introduces a cleaner experience for requesting chair resources, support, and account-based workflows.",
     features: [
