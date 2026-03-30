@@ -7,6 +7,9 @@ metadata:
   labels:
     {{- include "aet-request.labels" $ | nindent 4 }}
   annotations:
+    {{- with $.Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
     nginx.ingress.kubernetes.io/permanent-redirect: {{ $redirect.to | quote }}
     {{- with $.Values.ingress.redirectAnnotations }}
     {{- toYaml . | nindent 4 }}
@@ -15,9 +18,16 @@ spec:
   {{- if $.Values.ingress.className }}
   ingressClassName: {{ $.Values.ingress.className }}
   {{- end }}
+  {{- if $redirect.tlsSecretName }}
+  tls:
+    - hosts:
+        - {{ $redirect.host | quote }}
+      secretName: {{ $redirect.tlsSecretName }}
+  {{- else }}
   {{- with $.Values.ingress.redirectTls }}
   tls:
     {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
   rules:
     - host: {{ $redirect.host | quote }}

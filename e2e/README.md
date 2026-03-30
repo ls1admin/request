@@ -14,7 +14,7 @@ Playwright-based end-to-end tests that exercise all four request forms through t
 # Install Playwright and dependencies
 cd e2e
 npm install
-npx playwright install chromium
+npx playwright install chromium webkit
 
 # Install server dependencies (if not already done)
 cd ../server
