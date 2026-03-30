@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v1.5.1 (2026-03-30)
+
+### Bug Fixes
+
+- **annoucements**: Fix spelling mistake
+  ([`0c93555`](https://github.com/magkue/request/commit/0c9355516b0602c300a7a2dcd3f3760c43b9e3fa))
+
+### Chores
+
+- **release**: 1.6.1 [skip ci]
+  ([`7189165`](https://github.com/magkue/request/commit/7189165ffa3b4947c2260eb172c9f03dde15fd33))
+
+### Continuous Integration
+
+- **helm**: Add ingress-redirect
+  ([`d3f9b7d`](https://github.com/magkue/request/commit/d3f9b7d2ee27c896786f3ecde43f0f9f22f8d0c3))
+
+
 ## v1.5.0 (2026-03-30)
 
 ### Chores
