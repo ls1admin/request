@@ -1,0 +1,35 @@
+{{- if and .Values.ingress.enabled .Values.ingress.redirects -}}
+{{- range $index, $redirect := .Values.ingress.redirects }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-redirect-%d" (include "aet-request.fullname" $) $index | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "aet-request.labels" $ | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/permanent-redirect: {{ $redirect.to | quote }}
+    {{- with $.Values.ingress.redirectAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if $.Values.ingress.className }}
+  ingressClassName: {{ $.Values.ingress.className }}
+  {{- end }}
+  {{- with $.Values.ingress.redirectTls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    - host: {{ $redirect.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "aet-request.client.fullname" $ }}
+                port:
+                  number: {{ $.Values.client.service.port }}
+---
+{{- end }}
+{{- end }}

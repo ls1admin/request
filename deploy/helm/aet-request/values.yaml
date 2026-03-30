@@ -104,6 +104,10 @@ ingress:
         api: /api
         app: /
   tls: []
+  redirects: []
+  redirectAnnotations:
+    nginx.ingress.kubernetes.io/permanent-redirect-code: "308"
+  redirectTls: []
 
 networkPolicy:
   enabled: false
