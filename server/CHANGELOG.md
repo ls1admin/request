@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.6.0 (2026-05-01)
+
+### Chores
+
+- **release**: 1.7.0 [skip ci]
+  ([`f6fb0a9`](https://github.com/magkue/request/commit/f6fb0a99412c6b32e481c068afb393ccff70af32))
+
+### Features
+
+- Add a link to the github repository ([#3](https://github.com/magkue/request/pull/3),
+  [`e29a645`](https://github.com/magkue/request/commit/e29a6450290bb32bd4dd93e6b9e863a1461bc457))
+
+
 ## v1.5.3 (2026-05-01)
 
 ### Bug Fixes
