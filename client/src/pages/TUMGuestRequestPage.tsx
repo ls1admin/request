@@ -1,16 +1,16 @@
 import { ArrowLeft, Mail } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RequestErrorCard } from "@/components/shared/RequestErrorCard";
 import { RequestSuccessCard } from "@/components/shared/RequestSuccessCard";
 import { TUMGuestRequestForm } from "@/components/tum-guest-request/TUMGuestRequestForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { submitTUMGuestRequest } from "@/lib/api";
+import { handleSubmissionFailure } from "@/lib/submission-error";
 import type { TUMGuestRequest } from "@/types/tum-guest-request";
 
-interface SubmitResultSuccess {
+interface SubmitResult {
   success: true;
   requestId: string;
   ticketUrl: string | null;
@@ -19,21 +19,16 @@ interface SubmitResultSuccess {
   guestEmail: string;
 }
 
-interface SubmitResultError {
-  success: false;
-  error: string;
-}
-
-type SubmitResult = SubmitResultSuccess | SubmitResultError | null;
-
 export function TUMGuestRequestPage() {
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitResult, setSubmitResult] = useState<SubmitResult>(null);
+  const [submitFailed, setSubmitFailed] = useState(false);
+  const [submitResult, setSubmitResult] = useState<SubmitResult | null>(null);
 
   const handleSubmit = async (data: TUMGuestRequest) => {
     setIsSubmitting(true);
+    setSubmitFailed(false);
     try {
       const response = await submitTUMGuestRequest({
         ...data,
@@ -58,16 +53,22 @@ export function TUMGuestRequestPage() {
           guestEmail: data.email,
         });
       } else {
-        setSubmitResult({
-          success: false,
-          error: response.error ?? "Failed to submit request",
-        });
+        handleSubmissionFailure(
+          "TUM Guest Account",
+          data,
+          isAuthenticated,
+          setSubmitFailed,
+          { apiError: response.error, statusCode: response.statusCode },
+        );
       }
-    } catch {
-      setSubmitResult({
-        success: false,
-        error: "An unexpected error occurred",
-      });
+    } catch (error) {
+      handleSubmissionFailure(
+        "TUM Guest Account",
+        data,
+        isAuthenticated,
+        setSubmitFailed,
+        { caughtError: error },
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -159,16 +160,6 @@ export function TUMGuestRequestPage() {
     );
   }
 
-  if (submitResult?.success === false) {
-    return (
-      <RequestErrorCard
-        error={submitResult.error}
-        onTryAgain={() => setSubmitResult(null)}
-        onBack={() => navigate("/")}
-      />
-    );
-  }
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -200,6 +191,7 @@ export function TUMGuestRequestPage() {
       <TUMGuestRequestForm
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        submitFailed={submitFailed}
       />
     </div>
   );

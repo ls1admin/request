@@ -1,3 +1,4 @@
+import { ApiError } from "@/services/api";
 import { artemisDeveloperRequestsService } from "@/services/artemis-developer-requests";
 import { sshKeysService } from "@/services/ssh-keys";
 import { supportRequestsService } from "@/services/support-requests";
@@ -23,6 +24,7 @@ export interface APIResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
+  statusCode?: number;
 }
 
 export interface VMRequestSubmission extends VMRequest {
@@ -50,6 +52,7 @@ export async function fetchSSHKeys(): Promise<APIResponse<StoredSSHKey[]>> {
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to fetch SSH keys",
+      statusCode: error instanceof ApiError ? error.status : undefined,
       data: [],
     };
   }
@@ -62,7 +65,6 @@ export async function submitVMRequest(
   request: VMRequestSubmission,
 ): Promise<APIResponse<{ requestId: string; ticketUrl: string | null }>> {
   try {
-    // Extract just the VMRequest data (without user info which server gets from token)
     const { user: _user, ...vmRequestData } = request;
     const response = await vmRequestsService.create(vmRequestData);
     return {
@@ -78,6 +80,7 @@ export async function submitVMRequest(
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to submit request",
+      statusCode: error instanceof ApiError ? error.status : undefined,
     };
   }
 }
@@ -100,6 +103,7 @@ export async function addSSHKey(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to add SSH key",
+      statusCode: error instanceof ApiError ? error.status : undefined,
     };
   }
 }
@@ -209,6 +213,7 @@ export async function submitArtemisRequest(
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to submit request",
+      statusCode: error instanceof ApiError ? error.status : undefined,
     };
   }
 }
@@ -245,6 +250,7 @@ export async function submitVMAccessRequest(
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to submit request",
+      statusCode: error instanceof ApiError ? error.status : undefined,
     };
   }
 }
@@ -281,6 +287,7 @@ export async function submitSupportRequest(
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to submit request",
+      statusCode: error instanceof ApiError ? error.status : undefined,
     };
   }
 }
@@ -318,6 +325,7 @@ export async function submitTUMGuestRequest(
       success: false,
       error:
         error instanceof Error ? error.message : "Failed to submit request",
+      statusCode: error instanceof ApiError ? error.status : undefined,
     };
   }
 }

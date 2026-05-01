@@ -1,29 +1,32 @@
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RequestErrorCard } from "@/components/shared/RequestErrorCard";
 import { RequestSuccessCard } from "@/components/shared/RequestSuccessCard";
 import { Button } from "@/components/ui/button";
 import { VMRequestForm } from "@/components/vm-request/VMRequestForm";
 import { useAuth } from "@/hooks/useAuth";
 import { submitVMRequest } from "@/lib/api";
+import { handleSubmissionFailure } from "@/lib/submission-error";
+import { cleanProjectDetails } from "@/services/vm-requests";
 import type { VMRequest } from "@/types/vm-request";
 
 export function VMRequestPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     requestId?: string;
     ticketUrl?: string | null;
-    error?: string;
   } | null>(null);
 
-  const handleSubmit = async (data: VMRequest) => {
+  const handleSubmit = async (rawData: VMRequest) => {
     if (!user) return;
 
+    const data = cleanProjectDetails(rawData);
     setIsSubmitting(true);
+    setSubmitFailed(false);
     try {
       const response = await submitVMRequest({
         ...data,
@@ -42,15 +45,14 @@ export function VMRequestPage() {
           ticketUrl: response.data.ticketUrl,
         });
       } else {
-        setSubmitResult({
-          success: false,
-          error: response.error ?? "Failed to submit request",
+        handleSubmissionFailure("VM Request", data, true, setSubmitFailed, {
+          apiError: response.error,
+          statusCode: response.statusCode,
         });
       }
-    } catch {
-      setSubmitResult({
-        success: false,
-        error: "An unexpected error occurred",
+    } catch (error) {
+      handleSubmissionFailure("VM Request", data, true, setSubmitFailed, {
+        caughtError: error,
       });
     } finally {
       setIsSubmitting(false);
@@ -73,16 +75,6 @@ export function VMRequestPage() {
     );
   }
 
-  if (submitResult?.success === false) {
-    return (
-      <RequestErrorCard
-        error={submitResult.error ?? "An unexpected error occurred"}
-        onTryAgain={() => setSubmitResult(null)}
-        onBack={() => navigate("/")}
-      />
-    );
-  }
-
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
@@ -101,7 +93,11 @@ export function VMRequestPage() {
         </p>
       </div>
 
-      <VMRequestForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+      <VMRequestForm
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        submitFailed={submitFailed}
+      />
     </div>
   );
 }

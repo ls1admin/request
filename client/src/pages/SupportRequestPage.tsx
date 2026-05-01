@@ -1,7 +1,6 @@
 import { ArrowLeft, LogIn, UserX } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RequestErrorCard } from "@/components/shared/RequestErrorCard";
 import { RequestSuccessCard } from "@/components/shared/RequestSuccessCard";
 import { SupportRequestForm } from "@/components/support-request/SupportRequestForm";
 import { Button } from "@/components/ui/button";
@@ -14,22 +13,24 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { submitSupportRequest } from "@/lib/api";
+import { handleSubmissionFailure } from "@/lib/submission-error";
 import type { SupportRequest } from "@/types/support-request";
 
 export function SupportRequestPage() {
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading, login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
   const [continueAnonymous, setContinueAnonymous] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     requestId?: string;
     ticketUrl?: string | null;
-    error?: string;
   } | null>(null);
 
   const handleSubmit = async (data: SupportRequest) => {
     setIsSubmitting(true);
+    setSubmitFailed(false);
     try {
       const response = await submitSupportRequest({
         ...data,
@@ -51,16 +52,22 @@ export function SupportRequestPage() {
           ticketUrl: response.data.ticketUrl,
         });
       } else {
-        setSubmitResult({
-          success: false,
-          error: response.error ?? "Failed to submit request",
-        });
+        handleSubmissionFailure(
+          "Support Request",
+          data,
+          isAuthenticated,
+          setSubmitFailed,
+          { apiError: response.error, statusCode: response.statusCode },
+        );
       }
-    } catch {
-      setSubmitResult({
-        success: false,
-        error: "An unexpected error occurred",
-      });
+    } catch (error) {
+      handleSubmissionFailure(
+        "Support Request",
+        data,
+        isAuthenticated,
+        setSubmitFailed,
+        { caughtError: error },
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -79,16 +86,6 @@ export function SupportRequestPage() {
           possible.
         </p>
       </RequestSuccessCard>
-    );
-  }
-
-  if (submitResult?.success === false) {
-    return (
-      <RequestErrorCard
-        error={submitResult.error ?? "An unexpected error occurred"}
-        onTryAgain={() => setSubmitResult(null)}
-        onBack={() => navigate("/")}
-      />
     );
   }
 
@@ -158,7 +155,11 @@ export function SupportRequestPage() {
         </p>
       </div>
 
-      <SupportRequestForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+      <SupportRequestForm
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        submitFailed={submitFailed}
+      />
     </div>
   );
 }

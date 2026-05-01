@@ -2,7 +2,6 @@ import { ArrowLeft, LogIn, UserX } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArtemisRequestForm } from "@/components/artemis-request/ArtemisRequestForm";
-import { RequestErrorCard } from "@/components/shared/RequestErrorCard";
 import { RequestSuccessCard } from "@/components/shared/RequestSuccessCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,18 +13,19 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { submitArtemisRequest } from "@/lib/api";
+import { handleSubmissionFailure } from "@/lib/submission-error";
 import type { ArtemisRequest, GitHubUser } from "@/types/artemis-request";
 
 export function ArtemisRequestPage() {
   const navigate = useNavigate();
   const { user, isAuthenticated, isLoading, login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
   const [continueAnonymous, setContinueAnonymous] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     requestId?: string;
     ticketUrl?: string | null;
-    error?: string;
   } | null>(null);
 
   const handleSubmit = async (
@@ -33,6 +33,7 @@ export function ArtemisRequestPage() {
     githubUser?: GitHubUser,
   ) => {
     setIsSubmitting(true);
+    setSubmitFailed(false);
     try {
       const response = await submitArtemisRequest({
         ...data,
@@ -55,16 +56,22 @@ export function ArtemisRequestPage() {
           ticketUrl: response.data.ticketUrl,
         });
       } else {
-        setSubmitResult({
-          success: false,
-          error: response.error ?? "Failed to submit request",
-        });
+        handleSubmissionFailure(
+          "Artemis Developer Access",
+          data,
+          isAuthenticated,
+          setSubmitFailed,
+          { apiError: response.error, statusCode: response.statusCode },
+        );
       }
-    } catch {
-      setSubmitResult({
-        success: false,
-        error: "An unexpected error occurred",
-      });
+    } catch (error) {
+      handleSubmissionFailure(
+        "Artemis Developer Access",
+        data,
+        isAuthenticated,
+        setSubmitFailed,
+        { caughtError: error },
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -83,16 +90,6 @@ export function ArtemisRequestPage() {
           processed and you have been added to the Artemis GitHub organization.
         </p>
       </RequestSuccessCard>
-    );
-  }
-
-  if (submitResult?.success === false) {
-    return (
-      <RequestErrorCard
-        error={submitResult.error ?? "An unexpected error occurred"}
-        onTryAgain={() => setSubmitResult(null)}
-        onBack={() => navigate("/")}
-      />
     );
   }
 
@@ -163,7 +160,11 @@ export function ArtemisRequestPage() {
         </p>
       </div>
 
-      <ArtemisRequestForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+      <ArtemisRequestForm
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+        submitFailed={submitFailed}
+      />
     </div>
   );
 }
