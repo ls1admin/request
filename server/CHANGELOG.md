@@ -2,6 +2,25 @@
 
 <!-- version list -->
 
+## v1.5.3 (2026-05-01)
+
+### Bug Fixes
+
+- Replace error cards with toast notifications and auto-reporting
+  ([#2](https://github.com/magkue/request/pull/2),
+  [`3912064`](https://github.com/magkue/request/commit/3912064ddb85c4e882f823110ad7f8fbe5122bf3))
+
+### Chores
+
+- **release**: 1.6.3 [skip ci]
+  ([`3507434`](https://github.com/magkue/request/commit/35074342c8ece5c520fa7e8c90c3d417eb3925db))
+
+### Continuous Integration
+
+- **helm**: Increase migrate job backoff limit
+  ([`dbb704f`](https://github.com/magkue/request/commit/dbb704f4866963a349584bfe4ab93bc3e5dfeda8))
+
+
 ## v1.5.2 (2026-03-30)
 
 ### Bug Fixes
