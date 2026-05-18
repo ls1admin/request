@@ -229,7 +229,7 @@ class ArtemisDevDescriptionBuilder:
         csv_teams = self._format_subteams_csv(
             artemis_request.subteams, artemis_request.other_subteam
         )
-        return f"{tumid},{first_name},{last_name},{email},{artemis_request.github_username},{artemis_request.slack_email},{csv_teams},False,False,False,True,False,False,False,False,False,False,False"
+        return f"{tumid},{first_name},{last_name},{email},{artemis_request.github_username},{artemis_request.slack_email},{csv_teams},False,False,True,False,False,False,False,False,False,Fals,False,False"
 
 
 async def handle_artemis_ticket_creation(
