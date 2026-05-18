@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v1.6.1 (2026-05-18)
+
+### Bug Fixes
+
+- Add Staging 1 and Staging 2 to `CSV Import line` (ensuring compatability with DUMS developers.csv)
+  ([`51f9bd3`](https://github.com/ls1admin/request/commit/51f9bd38c8e36ff4f5a71414bb16a81bd26a1ca9))
+
+- Trigger redeploy
+  ([`61cc5ac`](https://github.com/ls1admin/request/commit/61cc5ac775badec1409c6ad727e66fd0634ff5aa))
+
+### Chores
+
+- **release**: 1.7.1 [skip ci]
+  ([`d47309e`](https://github.com/ls1admin/request/commit/d47309e30c83a40fdc8a0f0a8ca180f7641285f2))
+
+
 ## v1.6.0 (2026-05-01)
 
 ### Chores
