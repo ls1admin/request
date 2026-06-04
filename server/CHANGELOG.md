@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v1.6.2 (2026-06-04)
+
+### Bug Fixes
+
+- Correct typo in CSV template
+  ([`a66596d`](https://github.com/ls1admin/request/commit/a66596dfeef2f58d9ce1ef2a7e3a6a8dbc64e081))
+
+
 ## v1.6.1 (2026-05-18)
 
 ### Bug Fixes
