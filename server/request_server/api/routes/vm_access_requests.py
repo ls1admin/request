@@ -8,8 +8,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from request_server.api.routes._ticket import raise_on_ticket_failure
 from request_server.api.routes.ssh_keys import parse_ssh_key
-from request_server.core.config import settings
 from request_server.core.security import CurrentUser, get_current_user
 from request_server.db.session import get_db
 from request_server.models.ssh_key import SSHKey
@@ -117,25 +117,20 @@ async def create_vm_access_request(
     )
 
     db.add(access_request)
-    await db.commit()
+    await db.flush()
     await db.refresh(access_request)
 
-    # Create ticket in the configured ticket system
-    try:
-        ticket_key = await handle_vm_access_ticket_creation(
-            get_ticket_service(), access_request, ssh_public_key
-        )
-        if ticket_key:
-            access_request.jira_ticket_key = ticket_key
-            await db.commit()
-            await db.refresh(access_request)
-            logger.info(f"Created ticket {ticket_key} for VM access request {access_request.id}")
-        elif settings.ticket_system != "debug":
-            logger.warning(f"Failed to create ticket for VM access request {access_request.id}")
-    except Exception as e:
-        logger.error(f"Error creating ticket for VM access request {access_request.id}: {e}")
-        # Don't fail the request if ticket creation fails
+    ticket_key = await raise_on_ticket_failure(
+        handle_vm_access_ticket_creation(get_ticket_service(), access_request, ssh_public_key),
+        entity_id=access_request.id,
+        entity_label="VM access request",
+        logger=logger,
+    )
+    if ticket_key:
+        access_request.jira_ticket_key = ticket_key
 
+    await db.commit()
+    await db.refresh(access_request)
     return access_request
 
 

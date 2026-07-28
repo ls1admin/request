@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from request_server.core.config import settings
+from request_server.api.routes._ticket import raise_on_ticket_failure
 from request_server.core.security import CurrentUser, get_current_user, get_optional_current_user
 from request_server.db.session import get_db
 from request_server.models.artemis_developer_request import (
@@ -82,34 +82,25 @@ async def create_artemis_developer_request(
     )
 
     db.add(artemis_request)
-    await db.commit()
+    await db.flush()
     await db.refresh(artemis_request)
 
-    # Create ticket in the configured ticket system
-    try:
-        ticket_key = await handle_artemis_ticket_creation(
+    ticket_key = await raise_on_ticket_failure(
+        handle_artemis_ticket_creation(
             get_ticket_service(),
             artemis_request,
             is_authenticated=is_authenticated,
             requester_username=current_user.username if current_user else None,
-        )
-        if ticket_key:
-            artemis_request.jira_ticket_key = ticket_key
-            await db.commit()
-            await db.refresh(artemis_request)
-            logger.info(
-                f"Created ticket {ticket_key} for Artemis developer request {artemis_request.id}"
-            )
-        elif settings.ticket_system != "debug":
-            logger.warning(
-                f"Failed to create ticket for Artemis developer request {artemis_request.id}"
-            )
-    except Exception as e:
-        logger.error(
-            f"Error creating ticket for Artemis developer request {artemis_request.id}: {e}"
-        )
-        # Don't fail the request if ticket creation fails
+        ),
+        entity_id=artemis_request.id,
+        entity_label="Artemis developer request",
+        logger=logger,
+    )
+    if ticket_key:
+        artemis_request.jira_ticket_key = ticket_key
 
+    await db.commit()
+    await db.refresh(artemis_request)
     return artemis_request
 
 
