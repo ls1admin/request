@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from request_server.core.config import settings
+from request_server.api.routes._ticket import raise_on_ticket_failure
 from request_server.core.security import CurrentUser, get_current_user, get_optional_current_user
 from request_server.db.session import get_db
 from request_server.models.tum_guest_request import Gender as GenderModel
@@ -109,28 +109,25 @@ async def create_tum_guest_request(
     )
 
     db.add(guest_request)
-    await db.commit()
+    await db.flush()
     await db.refresh(guest_request)
 
-    # Create ticket in the configured ticket system
-    try:
-        ticket_key = await handle_tum_guest_ticket_creation(
+    ticket_key = await raise_on_ticket_failure(
+        handle_tum_guest_ticket_creation(
             get_ticket_service(),
             guest_request,
             is_authenticated=is_authenticated,
             requester_username=current_user.username if current_user else None,
-        )
-        if ticket_key:
-            guest_request.jira_ticket_key = ticket_key
-            await db.commit()
-            await db.refresh(guest_request)
-            logger.info(f"Created ticket {ticket_key} for TUM guest request {guest_request.id}")
-        elif settings.ticket_system != "debug":
-            logger.warning(f"Failed to create ticket for TUM guest request {guest_request.id}")
-    except Exception as e:
-        logger.error(f"Error creating ticket for TUM guest request {guest_request.id}: {e}")
-        # Don't fail the request if ticket creation fails
+        ),
+        entity_id=guest_request.id,
+        entity_label="TUM guest request",
+        logger=logger,
+    )
+    if ticket_key:
+        guest_request.jira_ticket_key = ticket_key
 
+    await db.commit()
+    await db.refresh(guest_request)
     return guest_request
 
 

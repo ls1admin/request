@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from request_server.core.config import settings
+from request_server.api.routes._ticket import raise_on_ticket_failure
 from request_server.core.security import CurrentUser, get_current_user, get_optional_current_user
 from request_server.db.session import get_db
 from request_server.models.support_request import (
@@ -68,28 +68,25 @@ async def create_support_request(
     )
 
     db.add(support_request)
-    await db.commit()
+    await db.flush()
     await db.refresh(support_request)
 
-    # Create ticket in the configured ticket system
-    try:
-        ticket_key = await handle_support_ticket_creation(
+    ticket_key = await raise_on_ticket_failure(
+        handle_support_ticket_creation(
             get_ticket_service(),
             support_request,
             is_authenticated=is_authenticated,
             requester_username=current_user.username if current_user else None,
-        )
-        if ticket_key:
-            support_request.jira_ticket_key = ticket_key
-            await db.commit()
-            await db.refresh(support_request)
-            logger.info(f"Created ticket {ticket_key} for support request {support_request.id}")
-        elif settings.ticket_system != "debug":
-            logger.warning(f"Failed to create ticket for support request {support_request.id}")
-    except Exception as e:
-        logger.error(f"Error creating ticket for support request {support_request.id}: {e}")
-        # Don't fail the request if ticket creation fails
+        ),
+        entity_id=support_request.id,
+        entity_label="support request",
+        logger=logger,
+    )
+    if ticket_key:
+        support_request.jira_ticket_key = ticket_key
 
+    await db.commit()
+    await db.refresh(support_request)
     return support_request
 
 
