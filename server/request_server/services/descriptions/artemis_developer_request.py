@@ -142,7 +142,7 @@ class ArtemisDevDescriptionBuilder:
             "- Outline\n"
             "- The Artemis test servers\n"
             f"- [GitHub](https://github.com/ls1intum)\n"
-            f"- Slack channels (invitation will be sent to {artemis_request.slack_email})\n"
+            f"- Slack channels\n"
             f"- [Grafana](https://grafana.monitoring.aet.cit.tum.de/) for logs and monitoring of the test servers (select Keycloak for login)"
         )
 
