@@ -139,7 +139,7 @@ class ArtemisDevDescriptionBuilder:
         requester_username: str | None,
     ) -> str:
         resources_list = (
-            "- Confluence and Bamboo\n"
+            "- Outline\n"
             "- The Artemis test servers\n"
             f"- [GitHub](https://github.com/ls1intum)\n"
             f"- Slack channels (invitation will be sent to {artemis_request.slack_email})\n"
