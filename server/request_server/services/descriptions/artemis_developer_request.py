@@ -141,9 +141,9 @@ class ArtemisDevDescriptionBuilder:
         resources_list = (
             "- Outline\n"
             "- The Artemis test servers\n"
-            f"- [GitHub](https://github.com/ls1intum)\n"
-            f"- Slack channels\n"
-            f"- [Grafana](https://grafana.monitoring.aet.cit.tum.de/) for logs and monitoring of the test servers (select Keycloak for login)"
+            "- [GitHub](https://github.com/ls1intum)\n"
+            "- Slack channels\n"
+            "- [Grafana](https://monitoring.aet.cit.tum.de/) for logs and monitoring of the test servers (select Keycloak for login)"
         )
 
         if is_authenticated and requester_username:
